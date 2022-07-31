@@ -1,0 +1,43 @@
+.burgerConstructor {
+    max-height: 912px;
+  }
+  
+  
+  .list {
+    list-style: none;
+  
+    padding: 0;
+    margin: 0;
+  
+    width: 100%;
+  
+    max-height: 480px;
+    max-width: 585px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+  }
+  
+  .item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .totalBox {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .priceBox {
+    display: flex;
+    align-items: center;
+  }
+  
+  
+  ::-webkit-scrollbar {
+    width: 8px;
+    background-color: #2f2f37;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #8585AD;
+  }

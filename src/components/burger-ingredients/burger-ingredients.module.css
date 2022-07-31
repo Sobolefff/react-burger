@@ -1,0 +1,56 @@
+.heading {
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  .list {
+    list-style: none;
+    padding: 0;
+    box-sizing: border-box;
+    max-height: 712px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+  }
+  
+  .listBox {
+    list-style: none;
+    padding: 0;
+  
+    display: flex;
+    flex-wrap: wrap;
+  
+    max-width: 600px;
+    width: 100%;
+  }
+  
+  .item {
+    position: relative;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  
+    width: 272px;
+    height: 160px;
+  
+    text-align: center;
+  
+  }
+  
+  .itemBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .itemPrice {
+    margin: 0;
+  }
+  
+  .count {
+    position: absolute;
+  
+    top: 0;
+    right: 0;
+  }
