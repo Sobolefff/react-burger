@@ -2,6 +2,12 @@
     max-height: 912px;
 }
 
+.wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .list {
     list-style: none;
     padding: 0;

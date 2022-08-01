@@ -9,7 +9,7 @@ const getIngredients = (data, type) => {
       {
         data.filter((ingredient) => (ingredient.type === type)).map((ingredient) => (
           <li className={`${burgerIngredientsStyles.item} pb-8`} key={ingredient._id}>
-            <img src={ingredient.image} alt="" />
+            <img src={ingredient.image} alt={ingredient.name} />
             <div className={`${burgerIngredientsStyles.itemBox} text text_type_digits-default`}>
               <p className={`${burgerIngredientsStyles.itemPrice} pt-1 pb-1 pr-2`}>{ingredient.price}</p>
               <CurrencyIcon type="primary" />
@@ -31,7 +31,7 @@ const BurgerIngredients = () => {
     return (
         <section className='mr-10'>
           <h1 className={`${burgerIngredientsStyles.heading} text text_type_main-large pt-10 pb-5`}>Соберите бургер</h1>
-          <div style={{ display: 'flex' }}>
+          <div className={burgerIngredientsStyles.wrap}>
             <Tab value="bun" active={current === 'bun'} onClick={setCurrent}>
               Булки
             </Tab>

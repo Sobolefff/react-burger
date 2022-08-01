@@ -5,20 +5,20 @@ import burgerConstructorStyles from './burger-constructor.module.css';
 const BurgerConstructor = ({ props }) => {
     return (
         <section className={`${burgerConstructorStyles.burgerConstructor} mt-25`} >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }} className={`${burgerConstructorStyles.boxIngredient} ml-8 pb-4`}>
+      <div className={`${burgerConstructorStyles.wrap} ml-8 pb-4`}>
         <ConstructorElement
           type="top"
           isLocked={true}
-          text={data[0].name}
+          text={`${data[0].name} (верх)`}
           price={200}
           thumbnail={data[0].image}
         />
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }} className={`${burgerConstructorStyles.boxIngredient} `}>
+      <div className={`${burgerConstructorStyles.wrap} `}>
         <ul className={`${burgerConstructorStyles.list} `}>
           {
             data.filter((ingredient) => (ingredient.type !== 'bun')).map((ingredient) => (
-              <li className={`${burgerConstructorStyles.item} pb-4 pr-2`} key={ingredient.id}>
+              <li className={`${burgerConstructorStyles.item} pb-4 pr-2`} key={ingredient._id}>
                 <DragIcon type="primary" />
                 <ConstructorElement
                   isLocked={false}
@@ -31,11 +31,11 @@ const BurgerConstructor = ({ props }) => {
           }
         </ul>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }} className={`${burgerConstructorStyles.boxIngredient} ml-8`}>
+      <div className={`${burgerConstructorStyles.wrap} ml-8`}>
         <ConstructorElement
           type="bottom"
           isLocked={true}
-          text={data[0].name}
+          text={`${data[0].name} (низ)`}
           price={200}
           thumbnail={data[0].image}
         />
