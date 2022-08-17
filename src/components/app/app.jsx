@@ -3,7 +3,7 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import AppStyle from './app.module.css';
 import { fetchData } from '../../utils/api';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const App = () => {
   const [state, setLoadedState] = useState({
@@ -12,11 +12,7 @@ const App = () => {
     hasError: false,
   });
 
-  useEffect(() => {
-    getIngredients();
-  }, []);
-
-  const getIngredients = () => {
+  const getIngredients = useCallback((state) => {
     setLoadedState({ ...state, hasError: false, isLoading: true });
     fetchData()
       .then((obj) =>
@@ -25,7 +21,11 @@ const App = () => {
       .catch((e) => {
         setLoadedState({ ...state, hasError: true, isLoading: false });
       });
-  }
+  }, []);
+
+  useEffect(() => {
+    getIngredients();
+  }, []);
 
     return (
       <div className={AppStyle.app}>
