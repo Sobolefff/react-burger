@@ -13,9 +13,6 @@ export default function BurgerIngredient(props) {
     const closeAllModals = () => {
         setIngredientsDetailsIsOpened(false)
     }
-    const handleEscKeydown = (evt) => {
-        evt.key === "Escape" && closeAllModals()
-    }
 
     return (
         <>
@@ -35,8 +32,7 @@ export default function BurgerIngredient(props) {
             {isIngredientsDetailsOpened && (
                 <Modal
                     title="Детали ингредиента"
-                    onOverlayClick={closeAllModals}
-                    onEscKeyDown={handleEscKeydown}
+                    onClose={closeAllModals}
                 >
                     <IngredientsDetails {...props} />
                 </Modal>

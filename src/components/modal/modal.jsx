@@ -8,27 +8,31 @@ const modalsContainer = document.querySelector("#modals");
 
 export default function Modal({
     title,
-    onOverlayClick,
-    onEscKeyDown,
+    onClose,
     children,
 }) {
+
+    const handleEscKeydown = (evt) => {
+        evt.key === "Escape" && onClose()
+    }
+
     useEffect(() => {
-    document.addEventListener("keydown", onEscKeyDown);
+    document.addEventListener("keydown", handleEscKeydown);
     return () => {
-        document.removeEventListener("keydown", onEscKeyDown);
+        document.removeEventListener("keydown", handleEscKeydown);
     };
     }, []);
 
     return ReactDOM.createPortal(
         <>
             <div className={styles.modal}>
-                <button className={styles.closebutton} onClick={onOverlayClick}>
+                <button className={styles.closebutton} onClick={onClose}>
                     <CloseIcon />
                 </button>
                 <h3 className={`${styles.title} text text_type_main-large`}>{title}</h3>
                 {children}
             </div>
-            <ModalOverlay onClick={onOverlayClick} />
+            <ModalOverlay onClick={onClose} />
         </>,
         modalsContainer
     );

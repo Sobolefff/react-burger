@@ -21,4 +21,5 @@ export const IngredientsCategory = forwardRef(({ title, ingredients, id }, ref) 
 IngredientsCategory.propTypes = {
   title: PropTypes.string.isRequired,
   ingredients: PropTypes.array.isRequired,
+  id: PropTypes.string.isRequired,
 };

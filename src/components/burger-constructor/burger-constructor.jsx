@@ -16,10 +16,6 @@ const BurgerConstructor = ({ data }) => {
     setIsOrderDetailsOpened(false);
   };
 
-  const handleEscKeydown = (evt) => {
-    evt.key === "Escape" && closeAllModals();
-  };
-
   const ingredients = data.filter((ingredient) => (ingredient.type !== 'bun'));
     return (
       <section className={`${burgerConstructorStyles.burgerConstructor} mt-25 pl-4`} >
@@ -68,7 +64,7 @@ const BurgerConstructor = ({ data }) => {
           </Button>
         </div>
         {isOrderDetailsOpened && (
-          <Modal onOverlayClick={closeAllModals} onEscKeyDown={handleEscKeydown}>
+          <Modal onClose={closeAllModals}>
             <OrderDetails />
           </Modal>
         )}
