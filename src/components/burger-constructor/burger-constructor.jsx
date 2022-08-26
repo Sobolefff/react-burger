@@ -1,13 +1,17 @@
 import { ConstructorElement, CurrencyIcon, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerConstructorStyles from './burger-constructor.module.css';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
 import { ArrayPropTypes } from "../../utils/proptypes";
+import { BurgerConstructorContext } from '../../services/BurgerConstructorContext';
 
-const BurgerConstructor = ({ data }) => {
+const BurgerConstructor = () => {
   const [isOrderDetailsOpened, setIsOrderDetailsOpened] = React.useState(false);
-
+  const { data } = useContext(BurgerConstructorContext);
+  const [ totalPrice, setTotalPrice ] = useState(0);
+  const [ orderNum, setOrderNum ] = useState('');
+  
   const openModal = () => {
     setIsOrderDetailsOpened(true);
   };
