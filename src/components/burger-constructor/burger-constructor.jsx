@@ -1,9 +1,9 @@
 import { ConstructorElement, CurrencyIcon, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerConstructorStyles from './burger-constructor.module.css';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
-import { ArrayPropTypes } from "../../utils/proptypes";
+//import { ArrayPropTypes } from "../../utils/proptypes";
 import { BurgerConstructorContext, TotalPriceContext, OrderNumContext } from '../../services/BurgerConstructorContext';
 import { apiPostOrder } from '../../utils/api';
 
@@ -13,12 +13,12 @@ const BurgerConstructor = () => {
   const [ totalPrice, setTotalPrice ] = useState(0);
   const [ orderNum, setOrderNum ] = useState('');
 
-  const bunArr = data.filter((el) => el.type === "bun");
-  const ingredients = data.filter((el) => (el.type !== 'bun'));
+  const bunArr = useMemo(() => data.filter((el) => el.type === "bun"), [data]);
+  const ingredients = useMemo(() => data.filter((el) => (el.type !== 'bun')), [data]);
   const bun = bunArr[0];
   const bunIdArr = [`${bunArr[0]._id}`]; 
   bunIdArr.push(`${bunArr[0]._id}`);
-  const orderData = Array.from(ingredients.map((el) => el._id)).concat( bunIdArr );
+  const orderData = useMemo(() => Array.from(ingredients.map((el) => el._id)).concat( bunIdArr ), [ingredients]);
 
 
 
@@ -88,9 +88,7 @@ const BurgerConstructor = () => {
           </div>
           {isOrderDetailsOpened && (
             <Modal onClose={closeAllModals}>
-              <OrderNumContext.Provider value={orderNum}>
-                <OrderDetails />
-              </OrderNumContext.Provider>
+              <OrderDetails value={orderNum}/>
             </Modal>
           )}
         </TotalPriceContext.Provider>

@@ -1,26 +1,28 @@
-const apiUrl = "https://norma.nomoreparties.space/api/ingredients";
-const postUrl = "https://norma.nomoreparties.space/api/orders";
+const apiConfig = {
+     baseURL: 'https://norma.nomoreparties.space/api/',
+     headers: {
+        'Content-type': 'application/json',
+     },
+}
 
-export const fetchData = async() => {
-    const res = await fetch(apiUrl);
-    if (res.ok) {
-        return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
+const checkResponse = (res) => {
+    return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
+}
+
+export const fetchData = async () => {
+    const res = await fetch(`${apiConfig.baseURL}ingredients`);
+    return checkResponse(res);
 }
 
 export const apiPostOrder = async (orderData) => {
-    const res = await fetch(postUrl, {
+    const res = await fetch(`${apiConfig.baseURL}orders`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: apiConfig.headers,
         body: JSON.stringify(
             { 
                 "ingredients": orderData
             } 
         ) 
     });
-    if (res.ok) {
-        return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
+    return checkResponse(res);
 }
