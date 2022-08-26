@@ -69,6 +69,6 @@ export default function BurgerIngredients() {
   );
 }
 
-BurgerIngredients.propTypes = {
-  data: ArrayPropTypes
-}
+// BurgerIngredients.propTypes = {
+//   data: ArrayPropTypes
+// }
