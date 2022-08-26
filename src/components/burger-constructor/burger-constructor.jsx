@@ -48,7 +48,7 @@ const BurgerConstructor = () => {
               isLocked={true}
               text={`${bun.name} (верх)`}
               price={bun.price}
-              thumbnail={data[0].image}
+              thumbnail={bun.image}
             />
           </div>
           <div className={`${burgerConstructorStyles.wrap} `}>
@@ -74,7 +74,7 @@ const BurgerConstructor = () => {
               isLocked={true}
               text={`${bun.name} (низ)`}
               price={bun.price}
-              thumbnail={data[0].image}
+              thumbnail={bun.image}
             />
           </div>
           <div className={`${burgerConstructorStyles.totalBox} pt-10`}>
