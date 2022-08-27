@@ -1,10 +1,12 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { IngredientsCategory } from "../ingredients-category/ingredients-category";
 import styles from "./burger-ingredients.module.css";
 import { ArrayPropTypes } from "../../utils/proptypes";
+import { BurgerConstructorContext } from "../../services/BurgerConstructorContext";
 
-export default function BurgerIngredients({ data }) {
+export default function BurgerIngredients() {
+  const { data } = useContext(BurgerConstructorContext);
   const [current, setCurrent] = useState('bun')
   const bunsArr = data.filter((el) => el.type === "bun");
   const mainArr = data.filter((el) => el.type === "main");
@@ -67,6 +69,6 @@ export default function BurgerIngredients({ data }) {
   );
 }
 
-BurgerIngredients.propTypes = {
-  data: ArrayPropTypes
-}
+// BurgerIngredients.propTypes = {
+//   data: ArrayPropTypes
+// }

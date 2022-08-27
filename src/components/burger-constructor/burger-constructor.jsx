@@ -1,77 +1,101 @@
 import { ConstructorElement, CurrencyIcon, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerConstructorStyles from './burger-constructor.module.css';
-import React from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
-import { ArrayPropTypes } from "../../utils/proptypes";
+//import { ArrayPropTypes } from "../../utils/proptypes";
+import { BurgerConstructorContext, TotalPriceContext, OrderNumContext } from '../../services/BurgerConstructorContext';
+import { apiPostOrder } from '../../utils/api';
 
-const BurgerConstructor = ({ data }) => {
+const BurgerConstructor = () => {
   const [isOrderDetailsOpened, setIsOrderDetailsOpened] = React.useState(false);
+  const { data } = useContext(BurgerConstructorContext);
+  const [ totalPrice, setTotalPrice ] = useState(0);
+  const [ orderNum, setOrderNum ] = useState('');
+
+  const bunArr = useMemo(() => data.filter((el) => el.type === "bun"), [data]);
+  const ingredients = useMemo(() => data.filter((el) => (el.type !== 'bun')), [data]);
+  const bun = bunArr[0];
+  const bunIdArr = [`${bunArr[0]._id}`]; 
+  bunIdArr.push(`${bunArr[0]._id}`);
+  const orderData = useMemo(() => Array.from(ingredients.map((el) => el._id)).concat( bunIdArr ), [ingredients]);
+
+
 
   const openModal = () => {
     setIsOrderDetailsOpened(true);
+    apiPostOrder(orderData).then((res) => setOrderNum(res.order.number));
   };
 
   const closeAllModals = () => {
     setIsOrderDetailsOpened(false);
   };
 
-  const ingredients = data.filter((ingredient) => (ingredient.type !== 'bun'));
+  
+
+  useEffect(() => {
+    let total = 0 + bun.price * 2;
+    total = ingredients.reduce(function (acc, obj) { return acc + obj.price; }, total);
+    setTotalPrice(total);
+  }, [totalPrice, setTotalPrice]);
+
     return (
       <section className={`${burgerConstructorStyles.burgerConstructor} mt-25 pl-4`} >
-        <div className={`${burgerConstructorStyles.wrap} ml-8 pb-4`}>
-          <ConstructorElement
-            type="top"
-            isLocked={true}
-            text={`${data[0].name} (верх)`}
-            price={20}
-            thumbnail={data[0].image}
-          />
-        </div>
-        <div className={`${burgerConstructorStyles.wrap} `}>
-          <ul className={`${burgerConstructorStyles.list} `}>
-            { 
-              ingredients.map((ingredient) => (
-                <li className={`${burgerConstructorStyles.item} pb-4 pr-2`} key={ingredient._id}>
-                  <div className='mr-2'><DragIcon type="primary" /></div>
-                  <ConstructorElement
-                    isLocked={false}
-                    text={ingredient.name}
-                    price={ingredient.price}
-                    thumbnail={ingredient.image}
-                  />
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-        <div className={`${burgerConstructorStyles.wrap} ml-8`}>
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            text={`${data[0].name} (низ)`}
-            price={20}
-            thumbnail={data[0].image}
-          />
-        </div>
-        <div className={`${burgerConstructorStyles.totalBox} pt-10`}>
-          <div className={`${burgerConstructorStyles.priceBox} pr-10`}>
-            <p className='text text_type_digits-medium pr-2'>610</p>
-            <CurrencyIcon type="primary" />
+        <TotalPriceContext.Provider value={{ totalPrice, setTotalPrice }}>
+          <div className={`${burgerConstructorStyles.wrap} ml-8 pb-4`}>
+            <ConstructorElement
+              type="top"
+              isLocked={true}
+              text={`${bun.name} (верх)`}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
           </div>
-          <Button type="primary" size="large" onClick={openModal}>
-            Оформить заказ
-          </Button>
-        </div>
-        {isOrderDetailsOpened && (
-          <Modal onClose={closeAllModals}>
-            <OrderDetails />
-          </Modal>
-        )}
+          <div className={`${burgerConstructorStyles.wrap} `}>
+            <ul className={`${burgerConstructorStyles.list} `}>
+              { 
+                ingredients.map((ingredient) => (
+                  <li className={`${burgerConstructorStyles.item} pb-4 pr-2`} key={ingredient._id}>
+                    <div className='mr-2'><DragIcon type="primary" /></div>
+                    <ConstructorElement
+                      isLocked={false}
+                      text={ingredient.name}
+                      price={ingredient.price}
+                      thumbnail={ingredient.image}
+                    />
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div className={`${burgerConstructorStyles.wrap} ml-8`}>
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              text={`${bun.name} (низ)`}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          </div>
+          <div className={`${burgerConstructorStyles.totalBox} pt-10`}>
+            <div className={`${burgerConstructorStyles.priceBox} pr-10`}>
+              <p className='text text_type_digits-medium pr-2'>{totalPrice}</p>
+              <CurrencyIcon type="primary" />
+            </div>
+            <Button type="primary" size="large" onClick={openModal}>
+              Оформить заказ
+            </Button>
+          </div>
+          {isOrderDetailsOpened && (
+            <Modal onClose={closeAllModals}>
+              <OrderDetails value={orderNum}/>
+            </Modal>
+          )}
+        </TotalPriceContext.Provider>
       </section>
     );
 }
-BurgerConstructor.propTypes = {
-  data: ArrayPropTypes,
-};
+// BurgerConstructor.propTypes = {
+//   data: ArrayPropTypes,
+// };
 export default BurgerConstructor;
