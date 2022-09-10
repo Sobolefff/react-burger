@@ -1,19 +1,21 @@
-import { useRef, useState, useContext } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { IngredientsCategory } from "../ingredients-category/ingredients-category";
 import styles from "./burger-ingredients.module.css";
-import { ArrayPropTypes } from "../../utils/proptypes";
-import { BurgerConstructorContext } from "../../services/BurgerConstructorContext";
+//import { ArrayPropTypes } from "../../utils/proptypes";
+import { useDispatch, useSelector } from "react-redux";
+import { getIngredients } from "../../services/actions";
 
 export default function BurgerIngredients() {
-  const { data } = useContext(BurgerConstructorContext);
+  
+  const { data } = useSelector(store => ({
+    data: store.ingredients.data
+  }));
   const [current, setCurrent] = useState('bun')
-  const bunsArr = data.filter((el) => el.type === "bun");
-  const mainArr = data.filter((el) => el.type === "main");
-  const sauceArr = data.filter((el) => el.type === "sauce");
-
+  const bunsArr = useMemo(() => data.filter((el) => el.type === "bun"), [data]);
+  const mainArr = useMemo(() => data.filter((el) => el.type === "main"), [data]);
+  const sauceArr = useMemo(() => data.filter((el) => el.type === "sauce"), [data]);
   const containerRef = useRef(null);
-
   const bunsRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);

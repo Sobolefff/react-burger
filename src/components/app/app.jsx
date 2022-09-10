@@ -2,47 +2,48 @@ import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import AppStyle from './app.module.css';
-import { fetchData } from '../../utils/api';
-import { useCallback, useEffect, useState } from 'react';
-import { BurgerConstructorContext } from '../../services/BurgerConstructorContext';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIngredients } from '../../services/actions';
+import { createStore, compose, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { rootReducer } from '../../services/reducers/index';
+
+const composeEnhancers =
+  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+    : compose;
+
+const enhancer = composeEnhancers(applyMiddleware(thunk));
+export const store = createStore(rootReducer, enhancer);
+
 
 const App = () => {
-  const [state, setLoadedState] = useState({
-    data: [],
-    isLoading: true,
-    hasError: false,
-  });
-
-  const getIngredients = useCallback((state) => {
-    setLoadedState({ ...state, hasError: false, isLoading: true });
-    fetchData()
-      .then((obj) =>
-        setLoadedState({ ...state, data: obj.data, isLoading: false })
-      )
-      .catch((e) => {
-        setLoadedState({ ...state, hasError: true, isLoading: false });
-      });
-  }, []);
+  const dispatch = useDispatch();
+  const { data, dataRequest, dataFailed } = useSelector(store => ({
+    data: store.ingredients.data,
+    dataRequest: store.ingredients.dataRequest,
+    dataFailed: store.ingredients.dataFailed
+  }));
 
   useEffect(() => {
-    getIngredients();
-  }, []);
+    dispatch(getIngredients());
+  }, [dispatch]);
+  
 
     return (
       <div className={AppStyle.app}>
         <AppHeader />
-        <BurgerConstructorContext.Provider value={state}>
           <main className={`${AppStyle.main} pl-5`}>
-            {state.isLoading && "Загрузка..."}
-            {state.hasError && "Произошла ошибка"}
-            {!state.isLoading && !state.hasError && (
+            {dataRequest && "Загрузка..."}
+            {dataFailed && "Произошла ошибка"}
+            {data && !dataRequest && !dataFailed && (
               <>
                 <BurgerIngredients />
                 <BurgerConstructor />
               </>
             )}
           </main>
-        </BurgerConstructorContext.Provider>
       </div>
     )
 }

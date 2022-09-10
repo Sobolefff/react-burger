@@ -1,24 +1,28 @@
 import { ConstructorElement, CurrencyIcon, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerConstructorStyles from './burger-constructor.module.css';
-import React, { useContext, useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
 //import { ArrayPropTypes } from "../../utils/proptypes";
-import { BurgerConstructorContext, TotalPriceContext, OrderNumContext } from '../../services/BurgerConstructorContext';
+import { TotalPriceContext} from '../../services/BurgerConstructorContext';
 import { apiPostOrder } from '../../utils/api';
+import { useSelector } from 'react-redux';
 
-const BurgerConstructor = () => {
+export default function BurgerConstructor() {
+
+  const { bun, content, count } = useSelector(store => ({
+    bun: store.ingredients.constructorData.bun,
+    content: store.ingredients.constructorData.content,
+  }));
+
   const [isOrderDetailsOpened, setIsOrderDetailsOpened] = React.useState(false);
-  const { data } = useContext(BurgerConstructorContext);
   const [ totalPrice, setTotalPrice ] = useState(0);
   const [ orderNum, setOrderNum ] = useState('');
-
-  const bunArr = useMemo(() => data.filter((el) => el.type === "bun"), [data]);
-  const ingredients = useMemo(() => data.filter((el) => (el.type !== 'bun')), [data]);
-  const bun = bunArr[0];
-  const bunIdArr = [`${bunArr[0]._id}`]; 
-  bunIdArr.push(`${bunArr[0]._id}`);
-  const orderData = useMemo(() => Array.from(ingredients.map((el) => el._id)).concat( bunIdArr ), [ingredients]);
+  //const bunArr = useMemo(() => Array.from(data.filter((el) => el.type === "bun")), [data]);
+  // const ingredients = useMemo(() => data.filter((el) => (el.type !== 'bun')), [data]);
+  const bunIdArr = [`${bun._id}`]; 
+  useMemo(() => bunIdArr.push(`${bun._id}`), [bun]);
+  const orderData = useMemo(() => Array.from(content.map((el) => el._id)).concat(bunIdArr), [content]);
 
 
 
@@ -35,7 +39,7 @@ const BurgerConstructor = () => {
 
   useEffect(() => {
     let total = 0 + bun.price * 2;
-    total = ingredients.reduce(function (acc, obj) { return acc + obj.price; }, total);
+    total = content.reduce(function (acc, obj) { return acc + obj.price; }, total);
     setTotalPrice(total);
   }, [totalPrice, setTotalPrice]);
 
@@ -54,7 +58,7 @@ const BurgerConstructor = () => {
           <div className={`${burgerConstructorStyles.wrap} `}>
             <ul className={`${burgerConstructorStyles.list} `}>
               { 
-                ingredients.map((ingredient) => (
+                content.map((ingredient) => (
                   <li className={`${burgerConstructorStyles.item} pb-4 pr-2`} key={ingredient._id}>
                     <div className='mr-2'><DragIcon type="primary" /></div>
                     <ConstructorElement
@@ -98,4 +102,3 @@ const BurgerConstructor = () => {
 // BurgerConstructor.propTypes = {
 //   data: ArrayPropTypes,
 // };
-export default BurgerConstructor;
