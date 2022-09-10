@@ -37,7 +37,7 @@ const App = () => {
           <main className={`${AppStyle.main} pl-5`}>
             {dataRequest && "Загрузка..."}
             {dataFailed && "Произошла ошибка"}
-            {data && !dataRequest && !dataFailed && (
+            {!dataRequest && !dataFailed && (
               <>
                 <BurgerIngredients />
                 <BurgerConstructor />

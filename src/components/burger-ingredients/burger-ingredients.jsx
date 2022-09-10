@@ -3,8 +3,7 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { IngredientsCategory } from "../ingredients-category/ingredients-category";
 import styles from "./burger-ingredients.module.css";
 //import { ArrayPropTypes } from "../../utils/proptypes";
-import { useDispatch, useSelector } from "react-redux";
-import { getIngredients } from "../../services/actions";
+import { useSelector } from "react-redux";
 
 export default function BurgerIngredients() {
   

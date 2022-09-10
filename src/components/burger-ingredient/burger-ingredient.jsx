@@ -4,14 +4,17 @@ import Modal from "../modal/modal";
 import { CurrencyIcon, Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-ingredient.module.css";
 import { ingredientsPropTypes } from "../../utils/proptypes";
+import { useDispatch, useSelector } from "react-redux";
+import { openCurrentIngredient, closeCurrentIngredient } from '../../services/actions'
 
 export default function BurgerIngredient(props) {
-    const [isIngredientsDetailsOpened, setIngredientsDetailsIsOpened] = React.useState(false)
+    const dispatch = useDispatch();
+    const isModalOpen = useSelector(store => store.details.isModalOpen);
     const openModal = () => {
-        setIngredientsDetailsIsOpened(true)
+        dispatch(openCurrentIngredient(props), [dispatch]);
     }
     const closeAllModals = () => {
-        setIngredientsDetailsIsOpened(false)
+        dispatch(closeCurrentIngredient(props), [dispatch]);
     }
 
     return (
@@ -29,12 +32,12 @@ export default function BurgerIngredient(props) {
                     <Counter count={1} size="default" />
                 </div>
             </div>
-            {isIngredientsDetailsOpened && (
+            {isModalOpen && (
                 <Modal
                     title="Детали ингредиента"
                     onClose={closeAllModals}
                 >
-                    <IngredientsDetails {...props} />
+                    <IngredientsDetails />
                 </Modal>
             )}
         </>

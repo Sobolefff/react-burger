@@ -4,22 +4,19 @@ import React, { useState, useEffect, useMemo } from 'react';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
 //import { ArrayPropTypes } from "../../utils/proptypes";
-import { TotalPriceContext} from '../../services/BurgerConstructorContext';
-import { apiPostOrder } from '../../utils/api';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getOrderNum, getTotalPrice } from '../../services/actions';
 
 export default function BurgerConstructor() {
+  const dispatch = useDispatch();
 
-  const { bun, content, count } = useSelector(store => ({
+  const { bun, content, order, totalPrice } = useSelector(store => ({
     bun: store.ingredients.constructorData.bun,
     content: store.ingredients.constructorData.content,
+    order: store.ingredients.order,
+    totalPrice: store.ingredients.totalPrice
   }));
-
-  const [isOrderDetailsOpened, setIsOrderDetailsOpened] = React.useState(false);
-  const [ totalPrice, setTotalPrice ] = useState(0);
-  const [ orderNum, setOrderNum ] = useState('');
-  //const bunArr = useMemo(() => Array.from(data.filter((el) => el.type === "bun")), [data]);
-  // const ingredients = useMemo(() => data.filter((el) => (el.type !== 'bun')), [data]);
+  const [isOrderDetailsOpened, setIsOrderDetailsOpened] = useState(false);
   const bunIdArr = [`${bun._id}`]; 
   useMemo(() => bunIdArr.push(`${bun._id}`), [bun]);
   const orderData = useMemo(() => Array.from(content.map((el) => el._id)).concat(bunIdArr), [content]);
@@ -28,24 +25,20 @@ export default function BurgerConstructor() {
 
   const openModal = () => {
     setIsOrderDetailsOpened(true);
-    apiPostOrder(orderData).then((res) => setOrderNum(res.order.number));
+    dispatch(getOrderNum(orderData));
   };
 
   const closeAllModals = () => {
     setIsOrderDetailsOpened(false);
   };
 
-  
-
   useEffect(() => {
-    let total = 0 + bun.price * 2;
-    total = content.reduce(function (acc, obj) { return acc + obj.price; }, total);
-    setTotalPrice(total);
-  }, [totalPrice, setTotalPrice]);
+    dispatch(getTotalPrice(bun, content));
+  }, [dispatch]);
 
     return (
       <section className={`${burgerConstructorStyles.burgerConstructor} mt-25 pl-4`} >
-        <TotalPriceContext.Provider value={{ totalPrice, setTotalPrice }}>
+        
           <div className={`${burgerConstructorStyles.wrap} ml-8 pb-4`}>
             <ConstructorElement
               type="top"
@@ -83,7 +76,7 @@ export default function BurgerConstructor() {
           </div>
           <div className={`${burgerConstructorStyles.totalBox} pt-10`}>
             <div className={`${burgerConstructorStyles.priceBox} pr-10`}>
-              <p className='text text_type_digits-medium pr-2'>{totalPrice}</p>
+              {totalPrice && (<p className='text text_type_digits-medium pr-2'>{totalPrice}</p>)}
               <CurrencyIcon type="primary" />
             </div>
             <Button type="primary" size="large" onClick={openModal}>
@@ -92,10 +85,10 @@ export default function BurgerConstructor() {
           </div>
           {isOrderDetailsOpened && (
             <Modal onClose={closeAllModals}>
-              <OrderDetails value={orderNum}/>
+              <OrderDetails value={order}/>
             </Modal>
           )}
-        </TotalPriceContext.Provider>
+        
       </section>
     );
 }
