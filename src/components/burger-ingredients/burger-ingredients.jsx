@@ -24,11 +24,23 @@ export default function BurgerIngredients() {
       top: ref.current.offsetTop - containerRef.current.offsetTop - 40
     });
 
-  const onTabClick = (tab, categoryRef) => () => {
+  const onTabClick = (tab) => () => {
     setCurrent(tab);
     const element = document.getElementById(tab);
     if (element) element.scrollIntoView({ behavior: "smooth" });
   };
+
+  const handleScroll = () => {
+		if (containerRef && bunsRef && sauceRef && mainRef && containerRef.current && bunsRef.current && sauceRef.current && mainRef.current) {
+			const bunDistance = Math.abs(containerRef.current.getBoundingClientRect().top - bunsRef.current.getBoundingClientRect().top)
+			const sauceDistance = Math.abs(containerRef.current.getBoundingClientRect().top - sauceRef.current.getBoundingClientRect().top)
+			const mainDistance = Math.abs(containerRef.current.getBoundingClientRect().top - mainRef.current.getBoundingClientRect().top)
+			const minDistance = Math.min(bunDistance, sauceDistance, mainDistance);
+			const currentHeader = minDistance === bunDistance
+				? 'bun' : minDistance === sauceDistance ? 'sauce' : 'main';
+			setCurrent(prevState => (currentHeader === prevState ? prevState : currentHeader))
+		}
+	}
 
   return (
       <section className="mr-10">
@@ -44,7 +56,7 @@ export default function BurgerIngredients() {
             Начинки
           </Tab>
         </div>
-        <section className={styles.options} ref={containerRef}>
+        <section className={styles.options} ref={containerRef} onScroll={handleScroll}>
           <>
             <IngredientsCategory
               id="bun"
