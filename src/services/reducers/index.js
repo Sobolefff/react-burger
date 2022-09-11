@@ -8,14 +8,18 @@ import {
     GET_ORDERNUM_FAILED,
     CURRENT_INGREDIENT_OPENED,
     CURRENT_INGREDIENT_CLOSED,
-    GET_TOTALPRICE
+    GET_TOTALPRICE,
+    ADD_ITEM,
+    ADD_BUN,
+    DELETE_ITEM,
+    UPDATE_ITEMS
 } from '../actions/index';
 
 const initialState = {
     data: [],
     constructorData: {
-        bun: [],
-        content: [],
+        bun: null,
+        filling: [],
     },
     currentIngredientDetails: {
         image: null,
@@ -31,8 +35,8 @@ const initialState = {
     orderNumRequest: false,
     orderNumFailed: false,
     currentIngredient: {},
-    order: '',
-    totalPrice: '',
+    order: null,
+    totalPrice: 0,
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -49,8 +53,9 @@ export const mainReducer = (state = initialState, action) => {
                 dataFailed: false,
                 data: action.data,
                 constructorData: {
-                    bun: action.data.filter((el) => el.type === "bun")[0],
-                    content: action.data.filter((el) => el.type !== "bun")
+                    ...state.constructorData,
+                    bun: action.bun,
+                    filling: action.filling
                 },
                 dataRequest: false,
             }
@@ -133,7 +138,66 @@ export const openIngredientReducer = (state = initialState, action) => {
     }
 };
 
+export const constructorReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case ADD_ITEM: {
+            let ingredientSum = state.constructorData.filling.filter(function(item){return item._id === action.item._id}).length + 1; 
+            return {
+                ...state,
+                constructorData: {
+                    ...state.constructorData,
+                    filling: 
+                    [...state.constructorData.filling.map((item) => 
+                        ({...item, added: ingredientSum})),
+                        ...[{ ...action.item, added: 1, key: action.key, count: ingredientSum }],
+                    ],
+                },
+            };
+        }
+        case ADD_BUN: {
+            return {
+                ...state,
+                constructorData: {
+                    ...state.constructorData,
+                    bun: {...action.item, count: 1}
+                }
+            }
+        }
+        case DELETE_ITEM: {
+            return {
+                ...state,
+                constructorData: {
+                    ...state.constructorData,
+                    filling: state.constructorData.filling
+                    .map((item) =>
+                        item._id === action.item._id
+                        ? { ...item, count: item.count - 1 }
+                        : item
+                    )
+                    .filter((item) => item.count > 0),
+                },
+            };
+        }
+        case UPDATE_ITEMS: {
+            const filling = [...state.constructorData.filling];
+            filling.splice(action.toIndex, 0, filling.splice(action.fromIndex, 1)[0]);
+            return {
+                ...state,
+                constructorData: {
+                    ...state.constructorData,
+                    filling: filling,
+                },
+            };
+        }
+        default: {
+            return state;
+        }
+    }
+}
+
 export const rootReducer = combineReducers({
     ingredients: mainReducer,
-    details: openIngredientReducer
+    details: openIngredientReducer,
+    constructor: constructorReducer,
 });
+

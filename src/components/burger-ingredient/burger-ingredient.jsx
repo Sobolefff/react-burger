@@ -5,11 +5,28 @@ import { CurrencyIcon, Counter } from "@ya.praktikum/react-developer-burger-ui-c
 import styles from "./burger-ingredient.module.css";
 import { ingredientsPropTypes } from "../../utils/proptypes";
 import { useDispatch, useSelector } from "react-redux";
-import { openCurrentIngredient, closeCurrentIngredient } from '../../services/actions'
+import { openCurrentIngredient, closeCurrentIngredient } from '../../services/actions';
+import { useDrag } from "react-dnd/dist/hooks";
 
 export default function BurgerIngredient(props) {
     const dispatch = useDispatch();
+    const { bun, filling } = useSelector(store => ({
+        bun: store.constructor.constructorData.bun,
+        filling: store.constructor.constructorData.filling
+    }));
     const isModalOpen = useSelector(store => store.details.isModalOpen);
+
+    let count;
+    filling && filling.map((el) => (el._id === props._id ? (count = el.count) : null));
+    let bunValue = bun && bun._id === props._id && bun.count;
+    const [, dragRef] = useDrag(
+        () => ({
+                type: 'ingredient',
+                item: props,
+        }),
+        [props]
+    );
+
     const openModal = () => {
         dispatch(openCurrentIngredient(props), [dispatch]);
     }
@@ -19,7 +36,7 @@ export default function BurgerIngredient(props) {
 
     return (
         <>
-            <div className={styles.card} onClick={openModal}>
+            <div className={styles.card} onClick={openModal} ref={dragRef}>
                 <img src={props.image} alt={props.name} />
                 <div className={`${styles.price} text text_type_digits-default`}>
                     <p className={`${styles.price} pt-1 pb-1 pr-2`}>
@@ -29,7 +46,8 @@ export default function BurgerIngredient(props) {
                 </div>
                 <p className="text text_type_main-default">{props.name}</p>
                 <div className={styles.count}>
-                    <Counter count={1} size="default" />
+                    {count && <Counter count={count} size="default" />}
+                    {bunValue && <Counter count={bunValue} size="default" />}
                 </div>
             </div>
             {isModalOpen && (

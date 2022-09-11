@@ -5,21 +5,27 @@ import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
 //import { ArrayPropTypes } from "../../utils/proptypes";
 import { useDispatch, useSelector } from 'react-redux';
-import { getOrderNum, getTotalPrice } from '../../services/actions';
+import {
+  getOrderNum,
+  getTotalPrice,
+  onDropHandler,
+  deleteItem
+} from '../../services/actions';
+import { useDrop } from 'react-dnd/dist/hooks/useDrop';
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
 
-  const { bun, content, order, totalPrice } = useSelector(store => ({
+  const { bun, filling, order, totalPrice } = useSelector(store => ({
     bun: store.ingredients.constructorData.bun,
-    content: store.ingredients.constructorData.content,
+    filling: store.ingredients.constructorData.filling,
     order: store.ingredients.order,
     totalPrice: store.ingredients.totalPrice
   }));
   const [isOrderDetailsOpened, setIsOrderDetailsOpened] = useState(false);
   const bunIdArr = [`${bun._id}`]; 
   useMemo(() => bunIdArr.push(`${bun._id}`), [bun]);
-  const orderData = useMemo(() => Array.from(content.map((el) => el._id)).concat(bunIdArr), [content]);
+  const orderData = useMemo(() => Array.from(filling.map((el) => el._id)).concat(bunIdArr), [filling]);
 
 
 
@@ -33,7 +39,7 @@ export default function BurgerConstructor() {
   };
 
   useEffect(() => {
-    dispatch(getTotalPrice(bun, content));
+    dispatch(getTotalPrice(bun, filling));
   }, [dispatch]);
 
     return (
@@ -51,7 +57,7 @@ export default function BurgerConstructor() {
           <div className={`${burgerConstructorStyles.wrap} `}>
             <ul className={`${burgerConstructorStyles.list} `}>
               { 
-                content.map((ingredient) => (
+                filling.map((ingredient) => (
                   <li className={`${burgerConstructorStyles.item} pb-4 pr-2`} key={ingredient._id}>
                     <div className='mr-2'><DragIcon type="primary" /></div>
                     <ConstructorElement
