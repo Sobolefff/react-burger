@@ -7,7 +7,7 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { rootReducer } from '../../services/reducers/index';
 import { getIngredients } from '../../services/actions';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -19,10 +19,14 @@ export const store = createStore(rootReducer, enhancer);
 
 
 const App = () => {
+  const oneFetch = useRef(false);
 
   const dispatch = useDispatch();
   useEffect(() => { 
-    dispatch(getIngredients()) 
+    if (oneFetch.current === false) {
+      dispatch(getIngredients());
+    }
+    return () => (oneFetch.current = true);
   }, [dispatch]);
 
   const { dataRequest, dataFailed } = useSelector(store => ({
