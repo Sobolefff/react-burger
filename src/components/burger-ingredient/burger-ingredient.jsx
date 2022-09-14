@@ -11,8 +11,8 @@ import { useDrag } from "react-dnd/dist/hooks";
 export default function BurgerIngredient(props) {
     const dispatch = useDispatch();
     const { bun, filling } = useSelector(store => ({
-        bun: store.constructor.constructorData.bun,
-        filling: store.constructor.constructorData.filling
+        bun: store.construct.constructorData.bun,
+        filling: store.construct.constructorData.filling
     }));
     const isModalOpen = useSelector(store => store.details.isModalOpen);
 
@@ -62,4 +62,4 @@ export default function BurgerIngredient(props) {
     )
 }
 
-BurgerIngredient.propTypes = ingredientsPropTypes.isRequired;
+// BurgerIngredient.propTypes = ingredientsPropTypes.isRequired;

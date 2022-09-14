@@ -28,7 +28,7 @@ export const getIngredients = () => {
             type: GET_INGREDIENTS_REQUEST
         });
         fetchData().then(res => {
-            if (res && res.success) {
+            if (res) {
                 dispatch({
                     type: GET_INGREDIENTS_SUCCESS,
                     data: res.data,
@@ -76,17 +76,6 @@ export const closeCurrentIngredient = () => {
     return function(dispatch) {
         dispatch({
             type: CURRENT_INGREDIENT_CLOSED,
-        })
-    }
-}
-
-export const getTotalPrice = (bun, content) => {
-    let total = 0 + bun.price * 2;
-    total = content.reduce(function (acc, obj) { return acc + obj.price; }, total);
-    return function(dispatch) {
-        dispatch({
-            type: GET_TOTALPRICE,
-            totalPrice: total
         })
     }
 }

@@ -3,13 +3,12 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { IngredientsCategory } from "../ingredients-category/ingredients-category";
 import styles from "./burger-ingredients.module.css";
 //import { ArrayPropTypes } from "../../utils/proptypes";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getIngredients } from "../../services/actions";
 
 export default function BurgerIngredients() {
   
-  const { data } = useSelector(store => ({
-    data: store.ingredients.data
-  }));
+  const data = useSelector(store => store.ingredients.data);
   const [current, setCurrent] = useState('bun')
   const bunsArr = useMemo(() => data.filter((el) => el.type === "bun"), [data]);
   const mainArr = useMemo(() => data.filter((el) => el.type === "main"), [data]);

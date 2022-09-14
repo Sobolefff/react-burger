@@ -198,6 +198,6 @@ export const constructorReducer = (state = initialState, action) => {
 export const rootReducer = combineReducers({
     ingredients: mainReducer,
     details: openIngredientReducer,
-    constructor: constructorReducer,
+    construct: constructorReducer,
 });
 
