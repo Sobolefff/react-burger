@@ -62,4 +62,4 @@ export default function BurgerIngredient(props) {
     )
 }
 
-// BurgerIngredient.propTypes = ingredientsPropTypes.isRequired;
+BurgerIngredient.propTypes = ingredientsPropTypes.isRequired;
