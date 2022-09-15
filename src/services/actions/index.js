@@ -62,11 +62,11 @@ export const getOrderNum = (orderData) => {
     }
 }
 
-export const openCurrentIngredient = (props) => {
+export const openCurrentIngredient = (ingredient) => {
     return function(dispatch) {
         dispatch({
             type: CURRENT_INGREDIENT_OPENED,
-            payload: props
+            payload: ingredient,
         });
     };
 };

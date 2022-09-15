@@ -1,4 +1,4 @@
-import { ConstructorElement, CurrencyIcon, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerConstructorStyles from './burger-constructor.module.css';
 import { useState } from 'react';
 import OrderDetails from '../order-details/order-details';
@@ -14,10 +14,9 @@ import BurgerFilling from '../burger-filling/burger-filling';
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
 
-  const { bun, filling, order } = useSelector(store => ({
+  const { bun, filling } = useSelector(store => ({
     bun: store.construct.constructorData.bun,
     filling: store.construct.constructorData.filling,
-    order: store.ingredients.order
   }));
   const [isOrderDetailsOpened, setIsOrderDetailsOpened] = useState(false); 
   const bunsPrice = bun && bun.price * 2;
