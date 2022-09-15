@@ -1,14 +1,12 @@
 import { ConstructorElement, CurrencyIcon, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerConstructorStyles from './burger-constructor.module.css';
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState } from 'react';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
-//import { ArrayPropTypes } from "../../utils/proptypes";
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getOrderNum,
   onDropHandler,
-  deleteItem
 } from '../../services/actions';
 import { useDrop } from 'react-dnd/dist/hooks/useDrop';
 import BurgerFilling from '../burger-filling/burger-filling';
@@ -21,17 +19,13 @@ export default function BurgerConstructor() {
     filling: store.construct.constructorData.filling,
     order: store.ingredients.order
   }));
-  const [isOrderDetailsOpened, setIsOrderDetailsOpened] = useState(false);
-  const bunIdArr = bun && [`${bun._id}`]; 
+  const [isOrderDetailsOpened, setIsOrderDetailsOpened] = useState(false); 
   const bunsPrice = bun && bun.price * 2;
-  const orderData = bun && filling && Array.from(filling.map((el) => el._id)).concat(bunIdArr);
 
   const dropHandler = (item) => {
     dispatch(onDropHandler(item));
   };
-  const deleteHandler = (item) => {
-    dispatch(deleteItem(item));
-  };
+  
 
   const [, dropTarget] = useDrop(() => ({
     accept: "ingredient",
@@ -41,6 +35,8 @@ export default function BurgerConstructor() {
   }));
 
   const openModal = () => {
+    const bunIdArr = bun && [`${bun._id}`];
+    const orderData = bun && filling && filling.map((el) => el._id).concat(bunIdArr);
     setIsOrderDetailsOpened(true);
     dispatch(getOrderNum(orderData));
   };
@@ -48,23 +44,14 @@ export default function BurgerConstructor() {
   const closeAllModals = () => {
     setIsOrderDetailsOpened(false);
   };
-
-  // useEffect(() => {
-  //   dispatch(getTotalPrice(bun, filling));
-  // }, [dispatch]);
-
   
-    let totalPrice = bun && bunsPrice
-      ? filling.reduce(function(acc, obj) {
+    const totalPrice = 
+      filling.reduce(function(acc, obj) {
           return acc + obj.price * obj.count;
-        }, bunsPrice)
-      : filling.reduce(function(acc, obj) {
-          return acc + obj.price * obj.count;
-        }, 0);
+        }, bun && bunsPrice ? bunsPrice : 0)
 
     return (
       <section className={`${burgerConstructorStyles.burgerConstructor} mt-25 pl-4`} ref={dropTarget}>
-            
             {bun && (
               <div className={`${burgerConstructorStyles} ml-8 pb-4`} >
                 <ConstructorElement
@@ -79,31 +66,29 @@ export default function BurgerConstructor() {
             <ul className={`${burgerConstructorStyles.list} `}>
             {!bun && filling.length === 0 && (
               <div className={burgerConstructorStyles.hint}>
-                <p className="text text_type_main-medium">Перенеси ингредиенты сюда, чтобы&nbsp;собрать&nbsp;бургер</p>
+                <p className="text text_type_main-medium">Перенесите ингредиенты сюда, чтобы&nbsp;собрать&nbsp;бургер</p>
               </div>
             )}
             {!bun && filling.length > 0 && (
               <div className={burgerConstructorStyles.hint}>
-                <p className="text text_type_main-medium">Добавь булку</p>
+                <p className="text text_type_main-medium">Добавьте булку</p>
               </div>
             )}
             {bun && filling.length === 0 && (
               <div className={burgerConstructorStyles.hint}>
-                <p className="text text_type_main-medium">Добавь начинку</p>
+                <p className="text text_type_main-medium">Добавьте начинку</p>
               </div>
             )}
               { 
-                filling.map((item, index) => item.count > 0 && (
+                filling.map((item, index) => (
                   <BurgerFilling 
                     key={item.key}
                     item={item}
-                    handleClose={() => deleteHandler(item)}
                     index={index}
                   />
                 ))
               }
             </ul>
-          {/* </div> */}
           {bun && (
               <div className={`${burgerConstructorStyles.wrap} ml-8 pb-4`} >
                 <ConstructorElement
@@ -126,13 +111,10 @@ export default function BurgerConstructor() {
           </div>
           {isOrderDetailsOpened && (
             <Modal onClose={closeAllModals}>
-              <OrderDetails value={order}/>
+              <OrderDetails />
             </Modal>
           )}
         
       </section>
     );
 }
-// BurgerConstructor.propTypes = {
-//   data: ArrayPropTypes,
-// };

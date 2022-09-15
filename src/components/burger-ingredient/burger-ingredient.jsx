@@ -17,8 +17,8 @@ export default function BurgerIngredient(props) {
     const isModalOpen = useSelector(store => store.details.isModalOpen);
 
     let count;
-    filling && filling.map((el) => (el._id === props._id ? (count = el.count) : null));
-    let bunValue = bun && bun._id === props._id && bun.count;
+    filling && filling.findLast((el) => (el._id === props._id ? (count = el.count) : null));
+    const bunValue = bun && bun._id === props._id && bun.count;
     const [, dragRef] = useDrag(
         () => ({
                 type: 'ingredient',

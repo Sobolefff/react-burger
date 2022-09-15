@@ -21,14 +21,7 @@ const initialState = {
         bun: null,
         filling: [],
     },
-    currentIngredientDetails: {
-        image: null,
-        name: null,
-        calories: null,
-        proteins: null,
-        fat: null,
-        carbohydrates: null
-    },
+    currentIngredientDetails: null,
     isModalOpen: false,
     dataRequest: false,
     dataFailed: false,
@@ -52,11 +45,6 @@ export const mainReducer = (state = initialState, action) => {
                 ...state,
                 dataFailed: false,
                 data: action.data,
-                constructorData: {
-                    ...state.constructorData,
-                    bun: action.bun,
-                    filling: action.filling
-                },
                 dataRequest: false,
             }
         }
@@ -70,7 +58,8 @@ export const mainReducer = (state = initialState, action) => {
         case GET_ORDERNUM_REQUEST: {
             return {
                 ...state,
-                orderNumRequest: true
+                orderNumRequest: true,
+                order: null,
             }
         }
         case GET_ORDERNUM_SUCCESS: {
@@ -86,6 +75,7 @@ export const mainReducer = (state = initialState, action) => {
                 ...state,
                 orderNumRequest: false,
                 orderNumFailed: true,
+                order: null,
             }
         }
         case GET_TOTALPRICE: {
@@ -95,9 +85,7 @@ export const mainReducer = (state = initialState, action) => {
             }
         }
         default: {
-            return {
-                ...state
-            }
+            return state;
         }
     }
 }
@@ -108,14 +96,7 @@ export const openIngredientReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isModalOpen: true,
-                currentIngredientDetails: {
-                image: action.payload.image,
-                name: action.payload.name,
-                calories: action.payload.calories,
-                proteins: action.payload.proteins,
-                fat: action.payload.fat,
-                carbohydrates: action.payload.carbohydrates,
-                }
+                currentIngredientDetails: action.payload
             };
         }
         case CURRENT_INGREDIENT_CLOSED: {
@@ -141,15 +122,21 @@ export const openIngredientReducer = (state = initialState, action) => {
 export const constructorReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_ITEM: {
-            let ingredientSum = state.constructorData.filling.filter(function(item){return item._id === action.item._id}).length + 1; 
+            // const ingredientSum = state.constructorData.filling.filter(function(item){return item._id === action.item._id}).length + 1;
+            const ingredientSum = state.constructorData.filling.reduce((sum, item) => {
+                if (item._id === action.item._id) {
+                    sum++;
+                }
+                return sum;
+            }, 1)
             return {
                 ...state,
                 constructorData: {
                     ...state.constructorData,
                     filling: 
                     [...state.constructorData.filling.map((item) => 
-                        ({...item, added: ingredientSum})),
-                        ...[{ ...action.item, added: 1, key: action.key, count: ingredientSum }],
+                        ({...item})),
+                        ...[{ ...action.item, key: action.key, count: ingredientSum }],
                     ],
                 },
             };
@@ -159,7 +146,7 @@ export const constructorReducer = (state = initialState, action) => {
                 ...state,
                 constructorData: {
                     ...state.constructorData,
-                    bun: {...action.item, count: 1}
+                    bun: {...action.item, count: 2}
                 }
             }
         }

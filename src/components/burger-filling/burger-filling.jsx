@@ -1,11 +1,11 @@
 import React, {useRef} from "react";
 import { useDispatch } from "react-redux";
 import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { UPDATE_ITEMS } from "../../services/actions";
+import { deleteItem, UPDATE_ITEMS } from "../../services/actions";
 import styles from "../burger-constructor/burger-constructor.module.css";
 import { useDrag, useDrop } from "react-dnd";
 
-export default function BurgerFilling({ item, index, handleClose }) {
+export default function BurgerFilling({ item, index }) {
 const dispatch = useDispatch();
 const ref = useRef();
 const [{ isDrag }, drag] = useDrag({
@@ -46,15 +46,18 @@ const [, drop] = useDrop({
 const opacity = isDrag ? 0.5 : 1;
 drag(drop(ref));
 
+const deleteHandler = (item) => {
+    dispatch(deleteItem(item));
+  };
+
 return (
     <li className={`${styles.item} pb-4 pr-2`} key={item._id} ref={ref} style={{ opacity }}>
         <div className='mr-2'><DragIcon type="primary" /></div>
         <ConstructorElement
-            isLocked={false}
             text={item.name}
             price={item.price}
             thumbnail={item.image}
-            handleClose={() => handleClose()}
+            handleClose={() => deleteHandler(item)}
             index={index}
         />
     </li>

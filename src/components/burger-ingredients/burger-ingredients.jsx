@@ -3,8 +3,7 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { IngredientsCategory } from "../ingredients-category/ingredients-category";
 import styles from "./burger-ingredients.module.css";
 //import { ArrayPropTypes } from "../../utils/proptypes";
-import { useDispatch, useSelector } from "react-redux";
-import { getIngredients } from "../../services/actions";
+import { useSelector } from "react-redux";
 
 export default function BurgerIngredients() {
   
@@ -17,11 +16,6 @@ export default function BurgerIngredients() {
   const bunsRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
-
-  const scroll = (ref) =>
-    containerRef.current.scroll({
-      top: ref.current.offsetTop - containerRef.current.offsetTop - 40
-    });
 
   const onTabClick = (tab) => () => {
     setCurrent(tab);

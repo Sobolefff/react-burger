@@ -32,8 +32,6 @@ export const getIngredients = () => {
                 dispatch({
                     type: GET_INGREDIENTS_SUCCESS,
                     data: res.data,
-                    bun: {},
-                    filling: [],
                 });
             } else {
                 dispatch({
@@ -50,7 +48,7 @@ export const getOrderNum = (orderData) => {
             type: GET_ORDERNUM_REQUEST
         });
         apiPostOrder(orderData).then(res => {
-            if (res) {
+            if (res && res.success) {
                 dispatch({
                     type: GET_ORDERNUM_SUCCESS,
                     orderNum: res.order.number
@@ -85,13 +83,13 @@ export const onDropHandler = (item) => {
         if (item.type !== 'bun' && item.dragged === undefined) {
             dispatch({
                 type: ADD_ITEM,
-                item: item,
+                item,
                 key: uuid()
             });
         } else {
             dispatch({
             type: ADD_BUN,
-            item: item,
+            item,
             })
         }
     };
@@ -100,6 +98,6 @@ export const onDropHandler = (item) => {
     export const deleteItem = (item) => {
         return {
             type: DELETE_ITEM,
-            item: item,
+            item,
         };
 };

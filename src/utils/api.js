@@ -1,8 +1,8 @@
 const apiConfig = {
-     baseURL: 'https://norma.nomoreparties.space/api/',
-     headers: {
+    baseURL: 'https://norma.nomoreparties.space/api/',
+    headers: {
         'Content-type': 'application/json',
-     },
+    },
 }
 
 const checkResponse = (res) => {
@@ -15,14 +15,13 @@ export const fetchData = async () => {
 }
 
 export const apiPostOrder = async (orderData) => {
-    const res = await fetch(`${apiConfig.baseURL}orders`, {
+    return await fetch(`${apiConfig.baseURL}orders`, {
         method: 'POST',
         headers: apiConfig.headers,
         body: JSON.stringify(
             { 
                 "ingredients": orderData
             } 
-        ) 
-    });
-    return checkResponse(res);
+        )
+    }).then(res => checkResponse(res));
 }
