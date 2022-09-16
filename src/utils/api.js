@@ -9,13 +9,13 @@ const checkResponse = (res) => {
     return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
 }
 
-export const fetchData = async () => {
-    const res = await fetch(`${apiConfig.baseURL}ingredients`);
-    return checkResponse(res);
+export const fetchData = () => {
+    return fetch(`${apiConfig.baseURL}ingredients`)
+    .then(checkResponse);
 }
 
-export const apiPostOrder = async (orderData) => {
-    return await fetch(`${apiConfig.baseURL}orders`, {
+export const apiPostOrder = (orderData) => {
+    return fetch(`${apiConfig.baseURL}orders`, {
         method: 'POST',
         headers: apiConfig.headers,
         body: JSON.stringify(
@@ -23,5 +23,7 @@ export const apiPostOrder = async (orderData) => {
                 "ingredients": orderData
             } 
         )
-    }).then(res => checkResponse(res));
+    })
+    .then(checkResponse)
+    .catch(err => err.status);
 }

@@ -6,6 +6,7 @@ import Modal from '../modal/modal';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getOrderNum,
+  GET_ORDERNUM_FAILED,
   onDropHandler,
 } from '../../services/actions';
 import { useDrop } from 'react-dnd/dist/hooks/useDrop';
@@ -37,7 +38,7 @@ export default function BurgerConstructor() {
     const bunIdArr = bun && [`${bun._id}`];
     const orderData = bun && filling && filling.map((el) => el._id).concat(bunIdArr);
     setIsOrderDetailsOpened(true);
-    dispatch(getOrderNum(orderData));
+    orderData && dispatch(getOrderNum(orderData));
   };
 
   const closeAllModals = () => {

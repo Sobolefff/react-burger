@@ -122,7 +122,6 @@ export const openIngredientReducer = (state = initialState, action) => {
 export const constructorReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_ITEM: {
-            // const ingredientSum = state.constructorData.filling.filter(function(item){return item._id === action.item._id}).length + 1;
             const ingredientSum = state.constructorData.filling.reduce((sum, item) => {
                 if (item._id === action.item._id) {
                     sum++;
