@@ -2,47 +2,43 @@ import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import AppStyle from './app.module.css';
-import { fetchData } from '../../utils/api';
-import { useCallback, useEffect, useState } from 'react';
-import { BurgerConstructorContext } from '../../services/BurgerConstructorContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIngredients } from '../../services/actions';
+import { useEffect, useRef } from 'react';
+
 
 const App = () => {
-  const [state, setLoadedState] = useState({
-    data: [],
-    isLoading: true,
-    hasError: false,
-  });
+  const oneFetch = useRef(false);
 
-  const getIngredients = useCallback((state) => {
-    setLoadedState({ ...state, hasError: false, isLoading: true });
-    fetchData()
-      .then((obj) =>
-        setLoadedState({ ...state, data: obj.data, isLoading: false })
-      )
-      .catch((e) => {
-        setLoadedState({ ...state, hasError: true, isLoading: false });
-      });
-  }, []);
+  const dispatch = useDispatch();
+  useEffect(() => { 
+    if (oneFetch.current === false) {
+      dispatch(getIngredients());
+    }
+    return () => {
+      oneFetch.current = true
+    }
+  }, [dispatch]);
 
-  useEffect(() => {
-    getIngredients();
-  }, []);
+  const { dataRequest, dataFailed } = useSelector(store => ({
+    dataRequest: store.ingredients.dataRequest,
+    dataFailed: store.ingredients.dataFailed
+  }));
+  
 
     return (
       <div className={AppStyle.app}>
         <AppHeader />
-        <BurgerConstructorContext.Provider value={state}>
           <main className={`${AppStyle.main} pl-5`}>
-            {state.isLoading && "Загрузка..."}
-            {state.hasError && "Произошла ошибка"}
-            {!state.isLoading && !state.hasError && (
+            {dataRequest && "Загрузка..."}
+            {dataFailed && "Произошла ошибка"}
+            {!dataRequest && !dataFailed && (
               <>
                 <BurgerIngredients />
                 <BurgerConstructor />
               </>
             )}
           </main>
-        </BurgerConstructorContext.Provider>
       </div>
     )
 }
