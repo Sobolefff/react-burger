@@ -30,7 +30,7 @@ export function ForgotPasswordPage() {
                 </div>
             </form>
             <div className={styles.textcontainer}>
-                <p className={'text text_type_main-default text_color_inactive'}>Вспомнили пароль?</p>
+                <p className={'text text_type_main-default text_color_inactive'}>Вспомнили пароль?&nbsp;</p>
                 <Link to="/login" className={`${styles.activetext} text text_type_main-default`}>Войти</Link>
             </div>
         </div>

@@ -21,10 +21,12 @@
 }
 .element {
     display: flex;
+    cursor: pointer;
 }
 
 .logo {
     justify-self: center;
+    cursor: pointer;
 }
 
 .profile {

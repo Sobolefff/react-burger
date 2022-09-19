@@ -1,21 +1,30 @@
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { registerUser } from '../services/actions/auth';
 import styles from './register.module.css';
 
 export function RegisterPage() {
     const dispatch = useDispatch();
+    const history = useHistory();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const register = useCallback(
-      (e) => {
-        e.preventDefault();
-      },
-      [],
+        (e) => {
+            e.preventDefault();
+            dispatch(registerUser(name, email, password, redirectOnSuccess));
+        },[email, name, password]
     )
+
+    const redirectOnSuccess = () => {
+            history.replace({
+            pathname: "/",
+            state: { from: "/register" },
+            });
+    };
 
     const onNameChange = (e) => {
         setName(e.target.value);

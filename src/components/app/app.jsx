@@ -4,35 +4,63 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Route,
   Switch,
+  useHistory,
+  useLocation,
 } from 'react-router-dom';
 import { HomePage } from '../../pages/home';
 import { LoginPage } from '../../pages/login';
 import { RegisterPage } from '../../pages/register';
 import { ForgotPasswordPage } from '../../pages/forgot-password';
+import { ResetPasswordPage } from '../../pages/reset-password';
+import { ProtectedRoute } from '../protected-route';
+import { ProfilePage } from '../../pages/profile';
 
 const App = () => {
-  
-  
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
 
-    return (
-      <div className={AppStyle.app}>
-        <AppHeader />
-        <Switch>
-          <Route path='/' exact={true}>
-            <HomePage />
-          </Route>
-          <Route path='/login' exact={true}>
-            <LoginPage />
-          </Route>
-          <Route path='/register' exact={true}>
-            <RegisterPage />
-          </Route>
-          <Route path='/forgot-password' exact={true}>
+  const data = useSelector((store) => store.ingredients.data);
+  const isForgotPassword = useSelector((store) => store.user.isForgotPassword);
+  const isUserAuthorized = useSelector((store) => store.user.isUserAuthorized);
+
+  const background = location.state && location.state.background;
+
+  return (
+    <div className={AppStyle.app}>
+      <AppHeader />
+      <Switch>
+        <Route path='/' exact={true}>
+          <HomePage />
+        </Route>
+        <Route path='/login' exact={true}>
+          <LoginPage />
+        </Route>
+        <Route path='/register' exact={true}>
+          <RegisterPage />
+        </Route>
+        <Route path='/forgot-password' exact={true}>
+          <ForgotPasswordPage />
+        </Route>
+        <Route path='/reset-password' exact={true}>
+          <ResetPasswordPage />
+        </Route>
+        {!isUserAuthorized && (
+          <Route path="/forgot-password" exact={true}>
             <ForgotPasswordPage />
           </Route>
-        </Switch>
-      </div>
-    )
+        )}
+        {isForgotPassword && (
+          <Route path="/reset-password" exact={true}>
+            <ResetPasswordPage />
+          </Route>
+        )}
+        <ProtectedRoute path="/profile" exact={true}>
+          <ProfilePage />
+        </ProtectedRoute>
+      </Switch>
+    </div>
+  )
 }
 
 export default App;

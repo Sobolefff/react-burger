@@ -1,7 +1,8 @@
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, Redirect, useLocation } from 'react-router-dom';
+import { loginUser } from '../services/actions/auth';
 import styles from './login.module.css';
 
 
@@ -9,9 +10,16 @@ export function LoginPage() {
     const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { state } = useLocation();
+    const isUserAuthorized = useSelector(store => store.user.isUserAuthorized);
+
+    if (isUserAuthorized) {
+        return <Redirect to={state?.from || "/"} />;
+      }
 
     const login = (e) => {
         e.preventDefault();
+        dispatch(loginUser(email, password));
     }
 
     const onEmailChange = (e) => {

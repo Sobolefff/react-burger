@@ -14,6 +14,7 @@ import {
     DELETE_ITEM,
     UPDATE_ITEMS
 } from '../actions/index';
+import { userReducer } from './auth';
 
 const initialState = {
     data: [],
@@ -185,5 +186,6 @@ export const rootReducer = combineReducers({
     ingredients: mainReducer,
     details: openIngredientReducer,
     construct: constructorReducer,
+    user: userReducer,
 });
 

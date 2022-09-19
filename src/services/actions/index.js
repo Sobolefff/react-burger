@@ -1,4 +1,4 @@
-import { fetchData, apiPostOrder } from '../../utils/api';
+import { apiFetchData, apiPostOrder } from '../../utils/api';
 import uuid from 'react-uuid';
 
 export const GET_INGREDIENTS_REQUEST = 'GET_INGREDIENTS_REQUEST';
@@ -27,7 +27,7 @@ export const getIngredients = () => {
         dispatch({
             type: GET_INGREDIENTS_REQUEST
         });
-        fetchData().then(res => {
+        apiFetchData().then(res => {
             if (res) {
                 dispatch({
                     type: GET_INGREDIENTS_SUCCESS,
