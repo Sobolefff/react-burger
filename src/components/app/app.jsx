@@ -8,6 +8,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { HomePage } from '../../pages/home';
+import { LoginPage } from '../../pages/login';
 
 const App = () => {
   
@@ -19,6 +20,9 @@ const App = () => {
         <Switch>
           <Route path='/' exact={true}>
             <HomePage />
+          </Route>
+          <Route path='/login' exact={true}>
+            <LoginPage />
           </Route>
         </Switch>
       </div>
