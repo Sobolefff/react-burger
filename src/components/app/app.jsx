@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Route,
   Switch,
-  useHistory,
-  useLocation,
 } from 'react-router-dom';
 import { HomePage } from '../../pages/home';
 import { LoginPage } from '../../pages/login';
+import { RegisterPage } from '../../pages/register';
+import { ForgotPasswordPage } from '../../pages/forgot-password';
 
 const App = () => {
   
@@ -23,6 +23,12 @@ const App = () => {
           </Route>
           <Route path='/login' exact={true}>
             <LoginPage />
+          </Route>
+          <Route path='/register' exact={true}>
+            <RegisterPage />
+          </Route>
+          <Route path='/forgot-password' exact={true}>
+            <ForgotPasswordPage />
           </Route>
         </Switch>
       </div>

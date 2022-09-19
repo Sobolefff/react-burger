@@ -27,7 +27,7 @@ export function LoginPage() {
             <p className="text text_type_main-medium">Вход</p>
             <form
                 className={styles.form}
-                onSubmit={e => login()}
+                onSubmit={(e) => login(e)}
             >
                 <div className={styles.email}>
                     <EmailInput

@@ -1,0 +1,42 @@
+.wrap {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 64px);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.form {
+    margin-top: 24px;
+}
+
+.email {
+    margin: 24px 0 0 0;
+}
+
+.password {
+    margin: 24px 0 24px 0;
+}
+
+.button {
+    margin-bottom: 80px;
+}
+
+.textcontainer {
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    text-align: center;
+    align-items: baseline;
+}
+
+.activetext {
+    color: #4c4cff;
+    text-decoration: none;
+}
+
+.activetext:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
