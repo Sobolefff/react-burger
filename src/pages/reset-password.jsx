@@ -1,18 +1,29 @@
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import { savePassword } from '../services/actions/auth';
 import styles from './reset-password.module.css';
 
 export function ResetPasswordPage() {
+    const history = useHistory();
+    const dispatch = useDispatch();
     const [password, setPassword] = useState("");
     const [code, setCode] = useState("");
 
     const saveNewPassword = (e) => {
         e.preventDefault();
-
+        dispatch(savePassword(password, code, redirectOnSuccess), [dispatch]);
         setPassword("");
         setCode("");
     };
+
+    const redirectOnSuccess = () => {
+        history.replace({
+          pathname: "/login",
+          state: { from: "/reset-password" },
+        });
+      };
 
     const onPasswordChange = (e) => {
         setPassword(e.target.value);

@@ -1,4 +1,4 @@
-import { apiLoginUser, apiRefreshToken, apiRegisterUser, apiUserRequest, apiConfig, checkResponse, apiUpdateUser, apiLogoutUser } from "../../utils/api";
+import { apiLoginUser, apiRefreshToken, apiRegisterUser, apiUserRequest, apiConfig, checkResponse, apiUpdateUser, apiLogoutUser, apiPasswordReset, apiPasswordSave } from "../../utils/api";
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -234,6 +234,54 @@ export const logoutUser = () => {
                     type: LOGOUT_FAILED,
                 });
             }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+};
+
+export const resetPassword = (email, redirectFunc) => {
+    return function(dispatch) {
+        dispatch({
+            type: RESET_PASSWORD_REQUEST,
+        });
+        apiPasswordReset(email)
+            .then((res) => {
+                if (res && res.success) {
+                    dispatch({
+                        type: RESET_PASSWORD_SUCCESS,
+                    });
+                    redirectFunc();
+                } else {
+                    dispatch({
+                        type: RESET_PASSWORD_FAILED,
+                    });
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+};
+
+export const savePassword = (password, code, redirectFunc) => {
+    return function(dispatch) {
+        dispatch({
+            type: SAVE_PASSWORD_REQUEST,
+        });
+        apiPasswordSave(password, code)
+            .then((res) => {
+                if (res && res.success) {
+                    dispatch({
+                        type: SAVE_PASSWORD_SUCCESS,
+                    });
+                    redirectFunc();
+                } else {
+                    dispatch({
+                        type: SAVE_PASSWORD_FAILED,
+                    });
+                }
             })
             .catch((err) => {
                 console.log(err);

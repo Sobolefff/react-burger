@@ -1,25 +1,60 @@
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, Redirect, useHistory } from 'react-router-dom';
+import { resetPassword } from '../services/actions/auth';
 import styles from './forgot-password.module.css';
 
 export function ForgotPasswordPage() {
+    const history = useHistory();
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('');
+    const isForgotPassword = useSelector(store => store.user.isForgotPassword);
+    const isUserAuthorized = useSelector(store => store.user.isUserAuthorized);
     
-    const resetPassword = (e, email) => {
-        e.preventDefault();
-
-        setEmail("");
+    
+    const resetUserPassword = (evt, email) => {
+        evt.preventDefault();
+        dispatch(resetPassword(email, redirectOnSuccess), [dispatch]);
+        //setEmail("");
     }
 
-    const onEmailChange = (e) => {
-        setEmail(e.target.value);
+    const redirectOnSuccess = () => {
+        history.replace({
+            pathname: "/reset-password",
+            state: { from: "/forgot-password" },
+        });
+    };
+
+    const onEmailChange = (evt) => {
+        setEmail(evt.target.value);
+    }
+    console.log(email);
+
+    if (isUserAuthorized) {
+        return (
+            <Redirect
+                to={{
+                pathname: '/'
+                }}
+            />
+        );
+    }
+
+    if (!isUserAuthorized && isForgotPassword) {
+        return (
+            <Redirect
+                to={{
+                    pathname: '/reset-password'
+                }}
+            />
+        );
     }
 
     return (
         <div className={styles.wrap}>
             <p className={'text text_type_main-medium mb-6'}>Восстановление пароля</p>
-            <form onSubmit={(e) => resetPassword(e)}>
+            <form onSubmit={(evt) => resetUserPassword(evt)}>
                 <EmailInput
                     onChange={onEmailChange}
                     value={email}
