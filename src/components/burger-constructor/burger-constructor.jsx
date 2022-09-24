@@ -6,19 +6,26 @@ import Modal from '../modal/modal';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getOrderNum,
-  GET_ORDERNUM_FAILED,
   onDropHandler,
 } from '../../services/actions';
 import { useDrop } from 'react-dnd/dist/hooks/useDrop';
 import BurgerFilling from '../burger-filling/burger-filling';
+import { useHistory } from 'react-router-dom';
 
 export default function BurgerConstructor() {
+  const history = useHistory();
   const dispatch = useDispatch();
 
-  const { bun, filling } = useSelector(store => ({
+  const { bun, filling, userName } = useSelector(store => ({
     bun: store.construct.constructorData.bun,
     filling: store.construct.constructorData.filling,
+    userName: store.user.user.name,
   }));
+
+  const redirectFunc = () => {
+    history.replace({ pathname: "/login" });
+  }
+
   const [isOrderDetailsOpened, setIsOrderDetailsOpened] = useState(false); 
   const bunsPrice = bun && bun.price * 2;
 
@@ -105,7 +112,7 @@ export default function BurgerConstructor() {
               <p className='text text_type_digits-medium pr-2'>{totalPrice}</p>
               <CurrencyIcon type="primary" />
             </div>
-            <Button type="primary" size="large" onClick={openModal}>
+            <Button type="primary" size="large" onClick={userName ? openModal : redirectFunc}>
               Оформить заказ
             </Button>
           </div>

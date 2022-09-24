@@ -29,7 +29,7 @@ const App = () => {
   return (
     <div className={AppStyle.app}>
       <AppHeader />
-      <Switch>
+      <Switch location={background || location}>
         <Route path='/' exact={true}>
           <HomePage />
         </Route>
@@ -58,6 +58,11 @@ const App = () => {
         <ProtectedRoute path="/profile" exact={true}>
           <ProfilePage />
         </ProtectedRoute>
+        <Route path="/ingredients/:id" exact={true}>
+          <DetailsModal title="Детали ингредиента">
+            <IngredientsDetails data={data} />
+          </DetailsModal>
+        </Route>
       </Switch>
     </div>
   )
