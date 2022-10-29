@@ -51,14 +51,14 @@ export default function BurgerIngredient(props) {
 
     return (
         <>
-            <Link
+            <Link ref={dragRef}
                 to={{
                     pathname: `/ingredients/${props._id}`,
                     state: { background: location },
                 }}
                 className={styles.link}
             >
-                <div className={styles.card} onClick={openModal} ref={dragRef}>
+                <div className={styles.card} onClick={openModal}>
                     <img src={props.image} alt={props.name} />
                     <div
                         className={`${styles.price} text text_type_digits-default`}
