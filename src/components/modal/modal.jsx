@@ -13,7 +13,7 @@ export default function Modal({
 }) {
 
     const handleEscKeydown = (evt) => {
-        evt.key === "Escape" && onClose()
+        evt.key === "Escape" && onClose();
     }
 
     useEffect(() => {
@@ -21,7 +21,7 @@ export default function Modal({
     return () => {
         document.removeEventListener("keydown", handleEscKeydown);
     };
-    }, []);
+    }, [handleEscKeydown]);
 
     return ReactDOM.createPortal(
         <>

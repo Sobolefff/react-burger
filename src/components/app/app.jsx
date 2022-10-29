@@ -1,12 +1,7 @@
 import AppHeader from '../app-header/app-header';
 import AppStyle from './app.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Route,
-  Switch,
-  useHistory,
-  useLocation,
-} from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { HomePage } from '../../pages/home';
 import { LoginPage } from '../../pages/login';
 import { RegisterPage } from '../../pages/register';
@@ -14,58 +9,96 @@ import { ForgotPasswordPage } from '../../pages/forgot-password';
 import { ResetPasswordPage } from '../../pages/reset-password';
 import { ProtectedRoute } from '../protected-route';
 import { ProfilePage } from '../../pages/profile';
+import DetailsModal from '../details-modal/details-modal';
+import Modal from '../modal/modal';
+import OrderDetails from '../order-details/order-details';
+import IngredientsDetails from '../ingredients-details/ingredients-details';
+import { useEffect } from 'react';
+import { closeCurrentIngredient, getIngredients } from '../../services/actions';
 
 const App = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const location = useLocation();
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const location = useLocation();
 
-  const data = useSelector((store) => store.ingredients.data);
-  const isForgotPassword = useSelector((store) => store.user.isForgotPassword);
-  const isUserAuthorized = useSelector((store) => store.user.isUserAuthorized);
+    const { isUserAuthorized, isForgotPassword, data, ingr } = useSelector(
+        (store) => ({
+            isUserAuthorized: store.user.isUserAuthorized,
+            isForgotPassword: store.user.isForgotPassword,
+            data: store.ingredients.data,
+            ingr: store.details.currentIngredientDetails,
+        })
+    );
 
-  const background = location.state && location.state.background;
+    const background = location.state && location.state.background;
 
-  return (
-    <div className={AppStyle.app}>
-      <AppHeader />
-      <Switch location={background || location}>
-        <Route path='/' exact={true}>
-          <HomePage />
-        </Route>
-        <Route path='/login' exact={true}>
-          <LoginPage />
-        </Route>
-        <Route path='/register' exact={true}>
-          <RegisterPage />
-        </Route>
-        <Route path='/forgot-password' exact={true}>
-          <ForgotPasswordPage />
-        </Route>
-        <Route path='/reset-password' exact={true}>
-          <ResetPasswordPage />
-        </Route>
-        {!isUserAuthorized && (
-          <Route path="/forgot-password" exact={true}>
-            <ForgotPasswordPage />
-          </Route>
-        )}
-        {isForgotPassword && (
-          <Route path="/reset-password" exact={true}>
-            <ResetPasswordPage />
-          </Route>
-        )}
-        <ProtectedRoute path="/profile" exact={true}>
-          <ProfilePage />
-        </ProtectedRoute>
-        <Route path="/ingredients/:id" exact={true}>
-          <DetailsModal title="Детали ингредиента">
-            <IngredientsDetails data={data} />
-          </DetailsModal>
-        </Route>
-      </Switch>
-    </div>
-  )
-}
+    const closeAllModals = () => {
+      history.goBack();
+      dispatch(closeCurrentIngredient(ingr), [dispatch]);
+    };
+
+    useEffect(() => {
+      dispatch(getIngredients());
+    }, [dispatch]);
+
+    return (
+        <div className={AppStyle.app}>
+            <AppHeader />
+            <Switch location={background || location}>
+                <Route path="/" exact={true}>
+                    <HomePage />
+                </Route>
+                <Route path="/login" exact={true}>
+                    <LoginPage />
+                </Route>
+                <Route path="/register" exact={true}>
+                    <RegisterPage />
+                </Route>
+                {!isUserAuthorized && (
+                    <Route path="/forgot-password" exact={true}>
+                        <ForgotPasswordPage />
+                    </Route>
+                )}
+                {isForgotPassword && (
+                    <Route path="/reset-password" exact={true}>
+                        <ResetPasswordPage />
+                    </Route>
+                )}
+                <Route path="/ingredients/:id" exact={true}>
+                    <DetailsModal title="Детали ингредиента">
+                        <IngredientsDetails data={data} />
+                    </DetailsModal>
+                </Route>
+                <ProtectedRoute path="/profile" exact={true}>
+                    <ProfilePage />
+                </ProtectedRoute>
+            </Switch>
+            {background && (
+                <>
+                    <ProtectedRoute
+                        path="/"
+                        exact={true}
+                        children={
+                            <Modal>
+                                <OrderDetails />
+                            </Modal>
+                        }
+                    />
+                    <Route
+                        path="/ingredients/:id"
+                        children={
+                            <Modal
+                                title="Детали ингредиента"
+                                onClose={closeAllModals}
+                            >
+                                <IngredientsDetails data={data} />
+                            </Modal>
+                        }
+                    />
+                </>
+            )}
+        </div>
+    );
+};
 
 export default App;

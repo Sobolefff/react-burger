@@ -14,10 +14,13 @@
 }
 
 .count {
-    
-        position: absolute;
-      
-        top: 0;
-        right: 0;
-      
+    position: absolute;
+
+    top: 0;
+    right: 0;
+}
+
+.link {
+    text-decoration: none;
+    color: #f2f2f3;
 }

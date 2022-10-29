@@ -2,25 +2,12 @@ import { useRef, useState, useMemo } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { IngredientsCategory } from "../ingredients-category/ingredients-category";
 import styles from "./burger-ingredients.module.css";
-//import { ArrayPropTypes } from "../../utils/proptypes";
-import { useDispatch, useSelector } from "react-redux";
-import { closeCurrentIngredient, openCurrentIngredient } from "../../services/actions";
-import Modal from "../modal/modal";
-import IngredientsDetails from "../ingredients-details/ingredients-details";
+import { useSelector } from "react-redux";
 
 export default function BurgerIngredients() {
-  const dispatch = useDispatch();
-  const {data, isModalOpen} = useSelector(store => ({
+  const { data } = useSelector(store => ({
     data: store.ingredients.data,
-    isModalOpen: store.details.isModalOpen,
   }));
-
-  const openModal = (ingredient) => {
-    dispatch(openCurrentIngredient(ingredient));
-  }
-  const closeAllModals = () => {
-    dispatch(closeCurrentIngredient());
-  }
 
   const [current, setCurrent] = useState('bun')
   const bunsArr = useMemo(() => data.filter((el) => el.type === "bun"), [data]);
@@ -66,21 +53,18 @@ export default function BurgerIngredients() {
         <section className={styles.options} ref={containerRef} onScroll={handleScroll}>
           <>
             <IngredientsCategory
-              openModal={openModal}
               id="bun"
               title="Булки"
               ingredients={bunsArr}
               ref={bunsRef}
             />
             <IngredientsCategory
-              openModal={openModal}
               id="sauce"
               title="Соусы"
               ingredients={sauceArr}
               ref={sauceRef}
             />
             <IngredientsCategory
-              openModal={openModal}
               id="main"
               title="Начинки"
               ingredients={mainArr}
@@ -88,14 +72,6 @@ export default function BurgerIngredients() {
             />
           </>
         </section>
-        {isModalOpen && (
-                <Modal
-                    title="Детали ингредиента"
-                    onClose={closeAllModals}
-                >
-                    <IngredientsDetails />
-                </Modal>
-        )}
       </section>
   );
 }

@@ -11,6 +11,7 @@ export const GET_ORDERNUM_FAILED = 'GET_ORDERNUM_FAILED';
 
 export const CURRENT_INGREDIENT_OPENED = 'CURRENT_INGREDIENT_OPENED';
 export const CURRENT_INGREDIENT_CLOSED = 'CURRENT_INGREDIENT_CLOSED';
+export const CURRENT_INGREDIENT_SET = 'CURRENT_INGREDIENT_SET';
 
 export const GET_TOTALPRICE = 'GET_TOTALPRICE';
 
@@ -62,11 +63,11 @@ export const getOrderNum = (orderData) => {
     }
 }
 
-export const openCurrentIngredient = (ingredient) => {
+export const openCurrentIngredient = (props) => {
     return function(dispatch) {
         dispatch({
             type: CURRENT_INGREDIENT_OPENED,
-            payload: ingredient,
+            payload: props,
         });
     };
 };
