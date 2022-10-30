@@ -1,4 +1,4 @@
-import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
@@ -53,7 +53,11 @@ export function RegisterPage() {
                     size={"default"}
                 />
                 <div className={styles.email}>
-                    <EmailInput onChange={onEmailChange} name={"email"} />
+                    <Input
+                        onChange={onEmailChange}
+                        type="email"
+                        placeholder='E-mail'
+                    />
                 </div>
                 <div className={styles.password}>
                     <PasswordInput className={styles.password} onChange={onPasswordChange} name={"password"} />

@@ -41,7 +41,7 @@ export function ProfilePage() {
         setState({ ...state, name: e.target.value, isValueChanged: true });
     };
     const onPasswordChange = (e) => {
-        setState({ ...state, password: e.target.value, isValueChanged: true });
+        setState({ ...state, password: e.target.value });
     };
     const onLoginChange = (e) => {
         setState({ ...state, email: e.target.value, isValueChanged: true });
@@ -148,10 +148,15 @@ export function ProfilePage() {
                             size="medium"
                             type="secondary"
                             onClick={onCancel}
+                            disabled={state.isValueChanged ? false : true}
                         >
                             Отмена
                         </Button>
-                        <Button size="medium" type="primary">
+                        <Button
+                            disabled={state.isValueChanged ? false : true}
+                            size="medium"
+                            type="primary"
+                        >
                             Сохранить
                         </Button>
                     </span>

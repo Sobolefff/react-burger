@@ -1,4 +1,4 @@
-import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect, useHistory } from 'react-router-dom';
@@ -16,7 +16,6 @@ export function ForgotPasswordPage() {
     const resetUserPassword = (evt, email) => {
         evt.preventDefault();
         dispatch(resetPassword(email, redirectOnSuccess), [dispatch]);
-        //setEmail("");
     }
 
     const redirectOnSuccess = () => {
@@ -29,7 +28,6 @@ export function ForgotPasswordPage() {
     const onEmailChange = (evt) => {
         setEmail(evt.target.value);
     }
-    console.log(email);
 
     if (isUserAuthorized) {
         return (
@@ -54,11 +52,12 @@ export function ForgotPasswordPage() {
     return (
         <div className={styles.wrap}>
             <p className={'text text_type_main-medium mb-6'}>Восстановление пароля</p>
-            <form onSubmit={(evt) => resetUserPassword(evt)}>
-                <EmailInput
+            <form onSubmit={(evt) => email && resetUserPassword(evt)}>
+                <Input
                     onChange={onEmailChange}
                     value={email}
-                    name={"email"}
+                    type={'email'}
+                    placeholder={'E-mail'}
                 />
                 <div className={styles.button}>
                     <Button type="primary" size="large">Восстановить</Button>

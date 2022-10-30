@@ -1,7 +1,13 @@
 import AppHeader from '../app-header/app-header';
 import AppStyle from './app.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import {
+    Redirect,
+    Route,
+    Switch,
+    useHistory,
+    useLocation,
+} from 'react-router-dom';
 import { HomePage } from '../../pages/home';
 import { LoginPage } from '../../pages/login';
 import { RegisterPage } from '../../pages/register';
@@ -15,6 +21,7 @@ import OrderDetails from '../order-details/order-details';
 import IngredientsDetails from '../ingredients-details/ingredients-details';
 import { useEffect } from 'react';
 import { closeCurrentIngredient, getIngredients } from '../../services/actions';
+import { AuthorizedRoute } from '../authorized-route';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -33,12 +40,12 @@ const App = () => {
     const background = location.state && location.state.background;
 
     const closeAllModals = () => {
-      history.goBack();
-      dispatch(closeCurrentIngredient(ingr), [dispatch]);
+        history.goBack();
+        dispatch(closeCurrentIngredient(ingr), [dispatch]);
     };
 
     useEffect(() => {
-      dispatch(getIngredients());
+        dispatch(getIngredients());
     }, [dispatch]);
 
     return (
@@ -48,22 +55,18 @@ const App = () => {
                 <Route path="/" exact={true}>
                     <HomePage />
                 </Route>
-                <Route path="/login" exact={true}>
+                <AuthorizedRoute path="/login" exact={true}>
                     <LoginPage />
-                </Route>
-                <Route path="/register" exact={true}>
+                </AuthorizedRoute>
+                <AuthorizedRoute path="/register" exact={true}>
                     <RegisterPage />
-                </Route>
-                {!isUserAuthorized && (
-                    <Route path="/forgot-password" exact={true}>
-                        <ForgotPasswordPage />
-                    </Route>
-                )}
-                {isForgotPassword && (
-                    <Route path="/reset-password" exact={true}>
-                        <ResetPasswordPage />
-                    </Route>
-                )}
+                </AuthorizedRoute>
+                <AuthorizedRoute path="/forgot-password" exact={true}>
+                    <ForgotPasswordPage />
+                </AuthorizedRoute>
+                <AuthorizedRoute path="/reset-password" exact={true}>
+                    <ResetPasswordPage />
+                </AuthorizedRoute>
                 <Route path="/ingredients/:id" exact={true}>
                     <DetailsModal title="Детали ингредиента">
                         <IngredientsDetails data={data} />
