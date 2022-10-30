@@ -208,6 +208,11 @@ export const updateUser = (email, name) => {
             type: UPDATE_REQUEST,
         });
         apiUpdateUser(email, name)
+            .catch((err) => {
+                if (err && err.message === 'jwt expired') {
+                    dispatch(refreshTokenAction());
+                }
+            })
             .then((res) => {
                 if (res && res.success) {
                     dispatch({
