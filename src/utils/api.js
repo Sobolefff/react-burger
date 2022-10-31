@@ -27,7 +27,6 @@ export const apiPostOrder = (orderData) => {
         )
     })
     .then(checkResponse)
-    .catch(err => err.status);
 }
 
 export const apiPasswordReset = (email) => {
@@ -39,7 +38,6 @@ export const apiPasswordReset = (email) => {
         }),
     })
     .then(checkResponse)
-    .catch(err => err.status);
 };
   
 export const apiPasswordSave = (password, token) => {
@@ -52,7 +50,6 @@ export const apiPasswordSave = (password, token) => {
         }),
     })
     .then(checkResponse)
-    .catch(err => err.status);
 };
   
 export const apiLoginUser = (email, password) => {
@@ -65,7 +62,6 @@ export const apiLoginUser = (email, password) => {
         }),
     })
     .then(checkResponse)
-    .catch(err => err.status);
 };
   
 export const apiLogoutUser = (token) => {
@@ -77,7 +73,6 @@ export const apiLogoutUser = (token) => {
         }),
     })
     .then(checkResponse)
-    .catch(err => err.status);
 };
 
 export const apiRegisterUser = (name, email, password) => {
@@ -91,7 +86,6 @@ export const apiRegisterUser = (name, email, password) => {
         }),
     })
     .then(checkResponse)
-    .catch(err => err.status);
 };
 
 export const apiUserRequest = () => {
@@ -118,19 +112,20 @@ export const apiRefreshToken = (refreshToken) => {
             token: refreshToken,
         }),
     })
-    .then(checkResponse)
-    .catch(err => err.status);
+    .then(checkResponse);
 };
+
+
+
   
-export const apiUpdateUser = (email, name) => {
-    return fetch(`${apiConfig.baseURL}auth/user`, {
+export const apiUpdateUser = async (email, name) => {
+    const res = await fetch(`${apiConfig.baseURL}auth/user`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
             Authorization: "Bearer " + getCookie("token"),
         },
         body: JSON.stringify({ email, name }),
-    })
-    .then(checkResponse)
-    .catch(err => err.status);
+    });
+    return checkResponse(res);
 };

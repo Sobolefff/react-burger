@@ -90,7 +90,7 @@ export const loginUser = (email, password) => {
                 });
                 const accessToken = res.accessToken.split('Bearer ')[1];
                 const refreshToken = res.refreshToken;
-                setCookie('token', accessToken);
+                setCookie('token', accessToken, {'max-age': 20});
                 localStorage.setItem('refreshToken', refreshToken);
             } else {
                 dispatch({
@@ -115,7 +115,7 @@ export const registerUser = (name, email, password, redirectFunc) => {
                 });
                 const accessToken = res.accessToken.split('Bearer ')[1];
                 const refreshToken = res.refreshToken;
-                setCookie('token', accessToken);
+                setCookie('token', accessToken, {'max-age': 20});
                 localStorage.setItem('refreshToken', refreshToken);
                 redirectFunc();
             } else {
@@ -144,7 +144,7 @@ export const refreshTokenAction = () => {
                     deleteCookie('token');
                     localStorage.removeItem('refreshToken', prevRefreshToken);
 
-                    setCookie('token', accessToken);
+                    setCookie('token', accessToken, {'max-age': 20});
                     localStorage.setItem('refreshToken', refreshToken);
                     dispatch({
                         type: REFRESH_TOKEN_SUCCESS,
@@ -165,7 +165,7 @@ export const refreshTokenAction = () => {
                     },
                 });
             })
-            .then((res) => checkResponse(res))
+            .then(checkResponse)
             .finally(() => {
                 dispatch({ type: AUTH_CHECKED });
             });
@@ -179,9 +179,10 @@ export const getUserInfo = () => {
         });
         apiUserRequest()
             .catch((err) => {
-                if (err && err.message === 'jwt expired') {
+                if (err === "Ошибка: 403") {
                     dispatch(refreshTokenAction());
                 }
+                console.log(err)
             })
             .then((res) => {
                 if (res && res.success) {
@@ -208,11 +209,6 @@ export const updateUser = (email, name) => {
             type: UPDATE_REQUEST,
         });
         apiUpdateUser(email, name)
-            .catch((err) => {
-                if (err && err.message === 'jwt expired') {
-                    dispatch(refreshTokenAction());
-                }
-            })
             .then((res) => {
                 if (res && res.success) {
                     dispatch({
@@ -227,7 +223,12 @@ export const updateUser = (email, name) => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+                if (err === 'Ошибка: 403') {
+                    dispatch(refreshTokenAction());
+                }
+            })
+            .finally((res) => {
+                dispatch({ type: AUTH_CHECKED });
             });
     };
 };

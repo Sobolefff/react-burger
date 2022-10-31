@@ -19,8 +19,7 @@ import DetailsModal from '../details-modal/details-modal';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import IngredientsDetails from '../ingredients-details/ingredients-details';
-import { useEffect } from 'react';
-import { closeCurrentIngredient, getIngredients } from '../../services/actions';
+import { closeCurrentIngredient } from '../../services/actions';
 import { AuthorizedRoute } from '../authorized-route';
 
 const App = () => {
@@ -43,10 +42,6 @@ const App = () => {
         history.goBack();
         dispatch(closeCurrentIngredient(ingr), [dispatch]);
     };
-
-    useEffect(() => {
-        dispatch(getIngredients());
-    }, [dispatch]);
 
     return (
         <div className={AppStyle.app}>
