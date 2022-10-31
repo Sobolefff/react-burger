@@ -46,6 +46,11 @@ export function ProfilePage() {
     const onLoginChange = (e) => {
         setState({ ...state, email: e.target.value, isValueChanged: true });
     };
+
+    useEffect(() => {
+        
+    },)
+
     const onSave = (e) => {
         e.preventDefault();
         dispatch(updateUser(state.email, state.name));
@@ -121,6 +126,7 @@ export function ProfilePage() {
                         icon={'EditIcon'}
                     />
                     <div className={styles.email}>
+                        <div className={'mt-6 mb-6'}>
                         <EmailInput
                             onChange={onLoginChange}
                             style={{ marginTop: '24px', marginBottom: '24px' }}
@@ -128,8 +134,9 @@ export function ProfilePage() {
                             value={state.email || ''}
                             icon={'EditIcon'}
                         />
+                        </div>
                     </div>
-                    <div className={styles.password}>
+                    <div className={`${styles.password} mb-6`}>
                         <PasswordInput
                             className={styles.password}
                             onChange={onPasswordChange}
@@ -156,6 +163,7 @@ export function ProfilePage() {
                             disabled={state.isValueChanged ? false : true}
                             size="medium"
                             type="primary"
+                            onClick={onSave}
                         >
                             Сохранить
                         </Button>

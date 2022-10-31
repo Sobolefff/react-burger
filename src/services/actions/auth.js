@@ -90,7 +90,7 @@ export const loginUser = (email, password) => {
                 });
                 const accessToken = res.accessToken.split('Bearer ')[1];
                 const refreshToken = res.refreshToken;
-                setCookie('token', accessToken, {'max-age': 20});
+                setCookie('tokenn', accessToken);
                 localStorage.setItem('refreshToken', refreshToken);
             } else {
                 dispatch({
@@ -115,7 +115,7 @@ export const registerUser = (name, email, password, redirectFunc) => {
                 });
                 const accessToken = res.accessToken.split('Bearer ')[1];
                 const refreshToken = res.refreshToken;
-                setCookie('token', accessToken, {'max-age': 20});
+                setCookie('tokenn', accessToken);
                 localStorage.setItem('refreshToken', refreshToken);
                 redirectFunc();
             } else {
@@ -141,10 +141,10 @@ export const refreshTokenAction = () => {
                     const accessToken = res.accessToken.split('Bearer ')[1];
                     const refreshToken = res.refreshToken;
 
-                    deleteCookie('token');
+                    deleteCookie('tokenn');
                     localStorage.removeItem('refreshToken', prevRefreshToken);
 
-                    setCookie('token', accessToken, {'max-age': 20});
+                    setCookie('tokenn', accessToken);
                     localStorage.setItem('refreshToken', refreshToken);
                     dispatch({
                         type: REFRESH_TOKEN_SUCCESS,
@@ -161,7 +161,7 @@ export const refreshTokenAction = () => {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: 'Bearer ' + getCookie('token'),
+                        Authorization: 'Bearer ' + getCookie('tokenn'),
                     },
                 });
             })
@@ -178,12 +178,6 @@ export const getUserInfo = () => {
             type: GET_USERINFO_REQUEST,
         });
         apiUserRequest()
-            .catch((err) => {
-                if (err === "Ошибка: 403") {
-                    dispatch(refreshTokenAction());
-                }
-                console.log(err)
-            })
             .then((res) => {
                 if (res && res.success) {
                     dispatch({
@@ -221,13 +215,14 @@ export const updateUser = (email, name) => {
                         type: UPDATE_FAILED,
                     });
                 }
+                return res;
             })
             .catch((err) => {
                 if (err === 'Ошибка: 403') {
                     dispatch(refreshTokenAction());
                 }
             })
-            .finally((res) => {
+            .finally(() => {
                 dispatch({ type: AUTH_CHECKED });
             });
     };
@@ -244,7 +239,7 @@ export const logoutUser = () => {
                     dispatch({
                         type: LOGOUT_SUCCESS,
                     });
-                    deleteCookie('token');
+                    deleteCookie('tokenn');
                     const refreshToken = localStorage.getItem('refreshToken');
                     localStorage.removeItem('refreshToken', refreshToken);
                 } else {

@@ -1,4 +1,4 @@
-import { getCookie } from "../services/actions/auth";
+import { getCookie, refreshTokenAction } from "../services/actions/auth";
 
 export const apiConfig = {
     baseURL: 'https://norma.nomoreparties.space/api/',
@@ -96,7 +96,7 @@ export const apiUserRequest = () => {
         credentials: "same-origin",
         headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + getCookie("token"),
+            Authorization: "Bearer " + getCookie("tokenn"),
         },
         redirect: "follow",
         referrerPolicy: "no-referrer",
@@ -115,17 +115,14 @@ export const apiRefreshToken = (refreshToken) => {
     .then(checkResponse);
 };
 
-
-
-  
-export const apiUpdateUser = async (email, name) => {
-    const res = await fetch(`${apiConfig.baseURL}auth/user`, {
+export const apiUpdateUser = (email, name) => {
+    return fetch(`${apiConfig.baseURL}auth/user`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
-            Authorization: "Bearer " + getCookie("token"),
+            Authorization: "Bearer " + getCookie("tokenn"),
         },
         body: JSON.stringify({ email, name }),
-    });
-    return checkResponse(res);
+    })
+    .then(checkResponse);
 };
