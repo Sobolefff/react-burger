@@ -47,10 +47,6 @@ export function ProfilePage() {
         setState({ ...state, email: e.target.value, isValueChanged: true });
     };
 
-    useEffect(() => {
-        
-    },)
-
     const onSave = (e) => {
         e.preventDefault();
         dispatch(updateUser(state.email, state.name));
