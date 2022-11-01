@@ -52,7 +52,7 @@ export function ForgotPasswordPage() {
     return (
         <div className={styles.wrap}>
             <p className={'text text_type_main-medium mb-6'}>Восстановление пароля</p>
-            <form onSubmit={(evt) => email && resetUserPassword(evt)}>
+            <form onSubmit={(evt) => email && resetUserPassword(evt, email)}>
                 <Input
                     onChange={onEmailChange}
                     value={email}
