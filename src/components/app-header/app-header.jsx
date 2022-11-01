@@ -6,7 +6,7 @@ import {
     ProfileIcon,
     Logo,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { refreshTokenAction } from '../../services/actions/auth';
 
@@ -18,42 +18,38 @@ const AppHeader = () => {
             dispatch(refreshTokenAction());
         }, 1140000);
     }, []);
-    const history = useHistory();
-
-    const onClick = useCallback(() => {
-        history.replace({ pathname: '/' });
-    }, [history]);
 
     return (
         <header className={headerStyles.header}>
             <div className={headerStyles.wrap}>
                 <nav>
                     <ul className={headerStyles.list}>
-                        <li
-                            className={`${headerStyles.element} pl-5 pr-5 pb-5 pt-5 mr-2`}
+                        <Link
+                            className={`${headerStyles.element} pl-5 pr-5 pb-5 pt-5`}
+                            to='/'
                         >
-                            <BurgerIcon type="primary" />
+                            <BurgerIcon type="secondary" />
                             <span
                                 className="text text_type_main-default text_color_inactive pl-2"
-                                onClick={onClick}
                             >
                                 Конструктор
                             </span>
-                        </li>
-                        <li
+                        </Link>
+                        <Link
                             className={`${headerStyles.element} pl-5 pr-5 pb-5 pt-5`}
+                            to='/feed'
                         >
                             <ListIcon type="secondary" />
                             <span className="text text_type_main-default text_color_inactive pl-2">
                                 Лента&nbsp;заказов
                             </span>
-                        </li>
+                        </Link>
                     </ul>
                 </nav>
-                <div onClick={onClick} className={headerStyles.logo}>
+                <Link className={headerStyles.logo} to='/'>
                     <Logo />
-                </div>
-                <Link to="/profile" className={headerStyles.profile}>
+                </Link>
+                <Link to="/profile" className={`${headerStyles.profile} pl-5 pr-5 pb-5 pt-5`}>
                     <ProfileIcon type="secondary" />
                     <span className="text text_type_main-default text_color_inactive pl-2">
                         Личный&nbsp;кабинет

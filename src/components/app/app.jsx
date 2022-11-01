@@ -19,15 +19,28 @@ import DetailsModal from '../details-modal/details-modal';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import IngredientsDetails from '../ingredients-details/ingredients-details';
-import { closeCurrentIngredient } from '../../services/actions';
+import { closeCurrentIngredient, getIngredients } from '../../services/actions';
 import { AuthorizedRoute } from '../authorized-route';
+import { FeedPage } from '../../pages/feed';
+import OrderInfo from '../../pages/order-info';
+import { useEffect, useRef } from 'react';
 
 const App = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
 
-    const { isUserAuthorized, isForgotPassword, data, ingr } = useSelector(
+    const oneFetch = useRef(false);
+    useEffect(() => { 
+        if (oneFetch.current === false) {
+        dispatch(getIngredients());
+    }
+        return () => {
+            oneFetch.current = true
+        }
+    }, [dispatch]);
+
+    const { data, ingr } = useSelector(
         (store) => ({
             isUserAuthorized: store.user.isUserAuthorized,
             isForgotPassword: store.user.isForgotPassword,
@@ -56,18 +69,28 @@ const App = () => {
                 <AuthorizedRoute path="/register" exact={true}>
                     <RegisterPage />
                 </AuthorizedRoute>
+                <Route path="/feed" exact={true}>
+                    <FeedPage />
+                </Route>
                 <AuthorizedRoute path="/forgot-password" exact={true}>
                     <ForgotPasswordPage />
                 </AuthorizedRoute>
                 <AuthorizedRoute path="/reset-password" exact={true}>
                     <ResetPasswordPage />
                 </AuthorizedRoute>
+                
                 <Route path="/ingredients/:id" exact={true}>
                     <DetailsModal title="Детали ингредиента">
                         <IngredientsDetails data={data} />
                     </DetailsModal>
                 </Route>
-                <ProtectedRoute path="/profile" exact={true}>
+                <Route path="/profile/orders/:id" exact={true}>
+                    <OrderInfo data={data} />
+                </Route>
+                <Route path="/feed/:id">
+                    <OrderInfo data={data} />
+                </Route>
+                <ProtectedRoute path="/profile" >
                     <ProfilePage />
                 </ProtectedRoute>
             </Switch>
@@ -79,6 +102,22 @@ const App = () => {
                         children={
                             <Modal>
                                 <OrderDetails />
+                            </Modal>
+                        }
+                    />
+                    <Route
+                        path="/feed/:id"
+                        children={
+                            <Modal onClose={closeAllModals}>
+                                <OrderInfo data={data} />
+                            </Modal>
+                        }
+                    />
+                    <ProtectedRoute
+                        path="/profile/orders/:id"
+                        children={
+                            <Modal onClose={closeAllModals}>
+                                <OrderInfo data={data} />
                             </Modal>
                         }
                     />

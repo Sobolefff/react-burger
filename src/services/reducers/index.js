@@ -3,9 +3,6 @@ import {
     GET_INGREDIENTS_REQUEST,
     GET_INGREDIENTS_SUCCESS,
     GET_INGREDIENTS_FAILED,
-    GET_ORDERNUM_REQUEST,
-    GET_ORDERNUM_SUCCESS,
-    GET_ORDERNUM_FAILED,
     CURRENT_INGREDIENT_OPENED,
     CURRENT_INGREDIENT_CLOSED,
     GET_TOTALPRICE,
@@ -15,6 +12,9 @@ import {
     UPDATE_ITEMS,
 } from '../actions/index';
 import { userReducer } from './auth';
+import { feedReducer } from './feed';
+import { wsReducer } from './ws';
+import { orderReducer } from './order';
 
 const initialState = {
     data: [],
@@ -33,8 +33,6 @@ const initialState = {
     isModalOpen: false,
     dataRequest: false,
     dataFailed: false,
-    orderNumRequest: false,
-    orderNumFailed: false,
     currentIngredient: {},
     order: null,
     totalPrice: 0,
@@ -61,29 +59,6 @@ export const mainReducer = (state = initialState, action) => {
                 ...state,
                 dataFailed: true,
                 dataRequest: false,
-            };
-        }
-        case GET_ORDERNUM_REQUEST: {
-            return {
-                ...state,
-                orderNumRequest: true,
-                order: null,
-            };
-        }
-        case GET_ORDERNUM_SUCCESS: {
-            return {
-                ...state,
-                order: action.orderNum,
-                orderNumRequest: false,
-                orderNumFailed: false,
-            };
-        }
-        case GET_ORDERNUM_FAILED: {
-            return {
-                ...state,
-                orderNumRequest: false,
-                orderNumFailed: true,
-                order: null,
             };
         }
         case GET_TOTALPRICE: {
@@ -217,4 +192,7 @@ export const rootReducer = combineReducers({
     details: openIngredientReducer,
     construct: constructorReducer,
     user: userReducer,
+    ord: orderReducer,
+    feed: feedReducer,
+    ws: wsReducer,
 });

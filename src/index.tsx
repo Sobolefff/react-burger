@@ -12,7 +12,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+  
     <Provider store={store}>
       <DndProvider backend={HTML5Backend}>
         <Router>
@@ -20,5 +20,5 @@ root.render(
         </Router>
       </DndProvider>
     </Provider>
-  </React.StrictMode>
+  
 );

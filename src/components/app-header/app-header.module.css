@@ -21,7 +21,7 @@
 }
 .element {
     display: flex;
-    cursor: pointer;
+    text-decoration: none;
 }
 
 .logo {

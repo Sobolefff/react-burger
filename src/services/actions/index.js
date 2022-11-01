@@ -43,26 +43,6 @@ export const getIngredients = () => {
     }
 }
 
-export const getOrderNum = (orderData) => {
-    return function(dispatch) {
-        dispatch({
-            type: GET_ORDERNUM_REQUEST
-        });
-        apiPostOrder(orderData).then(res => {
-            if (res && res.success) {
-                dispatch({
-                    type: GET_ORDERNUM_SUCCESS,
-                    orderNum: res.order.number
-                });
-            } else {
-                dispatch({
-                    type: GET_ORDERNUM_FAILED
-                });
-            }
-        })
-    }
-}
-
 export const openCurrentIngredient = (props) => {
     return function(dispatch) {
         dispatch({
