@@ -36,10 +36,10 @@
     align-self: start;
 }
 
-.form {
-    justify-self: center;
-}
-
 .textactive {
     color: #F2F2F3;
+}
+
+.hiddentext {
+    display: none;
 }
