@@ -1,0 +1,26 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.price {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.count {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+}
+
+.link {
+    text-decoration: none;
+    color: #f2f2f3;
+}

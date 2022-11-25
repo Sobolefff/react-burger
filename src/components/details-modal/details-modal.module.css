@@ -1,0 +1,25 @@
+.modal {
+    display: flex;
+    flex-direction: column;
+    width: 640px;
+    height: 575px;
+    position: relative;
+    margin: 120px auto 0 auto;
+    z-index: 3;
+    background: transparent;
+    text-align: center;
+  }
+  
+  .title {
+    margin: 0 auto;
+    padding: 0;
+    height: 64px;
+    font-family: "JetBrains";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+    color: #f2f2f3;
+  }
