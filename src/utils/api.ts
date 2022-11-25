@@ -1,4 +1,4 @@
-import { getCookie, refreshTokenAction } from '../services/actions/auth';
+import { getCookie } from '../services/actions/auth';
 
 export const apiConfig = {
     baseURL: 'https://norma.nomoreparties.space/api/',
@@ -7,7 +7,7 @@ export const apiConfig = {
     },
 };
 
-export const checkResponse = (res) => {
+export const checkResponse = (res: Response) => {
     return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
 };
 
@@ -15,7 +15,7 @@ export const apiFetchData = () => {
     return fetch(`${apiConfig.baseURL}ingredients`).then(checkResponse);
 };
 
-export const apiPasswordReset = (email) => {
+export const apiPasswordReset = (email: string) => {
     return fetch(`${apiConfig.baseURL}password-reset`, {
         method: 'POST',
         headers: apiConfig.headers,
@@ -25,7 +25,7 @@ export const apiPasswordReset = (email) => {
     }).then(checkResponse);
 };
 
-export const apiPasswordSave = (password, token) => {
+export const apiPasswordSave = (password: string, token: string) => {
     return fetch(`${apiConfig.baseURL}password-reset/reset`, {
         method: 'POST',
         headers: apiConfig.headers,
@@ -36,7 +36,7 @@ export const apiPasswordSave = (password, token) => {
     }).then(checkResponse);
 };
 
-export const apiLoginUser = (email, password) => {
+export const apiLoginUser = (email: string, password: string) => {
     return fetch(`${apiConfig.baseURL}auth/login`, {
         method: 'POST',
         headers: apiConfig.headers,
@@ -47,7 +47,7 @@ export const apiLoginUser = (email, password) => {
     }).then(checkResponse);
 };
 
-export const apiLogoutUser = (token) => {
+export const apiLogoutUser = (token: string) => {
     return fetch(`${apiConfig.baseURL}auth/logout`, {
         method: 'POST',
         headers: apiConfig.headers,
@@ -57,7 +57,7 @@ export const apiLogoutUser = (token) => {
     }).then(checkResponse);
 };
 
-export const apiRegisterUser = (name, email, password) => {
+export const apiRegisterUser = (name: string, email: string, password: string) => {
     return fetch(`${apiConfig.baseURL}auth/register`, {
         method: 'POST',
         headers: apiConfig.headers,
@@ -84,7 +84,7 @@ export const apiUserRequest = () => {
     }).then(checkResponse);
 };
 
-export const apiRefreshToken = (refreshToken) => {
+export const apiRefreshToken = (refreshToken: string) => {
     return fetch(`${apiConfig.baseURL}auth/token`, {
         method: 'POST',
         headers: apiConfig.headers,
@@ -94,7 +94,7 @@ export const apiRefreshToken = (refreshToken) => {
     }).then(checkResponse);
 };
 
-export const apiUpdateUser = (email, name) => {
+export const apiUpdateUser = (email: string, name: string) => {
     return fetch(`${apiConfig.baseURL}auth/user`, {
         method: 'PATCH',
         headers: {
@@ -105,7 +105,7 @@ export const apiUpdateUser = (email, name) => {
     }).then(checkResponse);
 };
 
-export const apiGetUserOrder = (id) => {
+export const apiGetUserOrder = (id: string) => {
     return fetch(`${apiConfig.baseURL}orders/${id}`, {
         method: 'GET',
         headers: {
@@ -115,7 +115,7 @@ export const apiGetUserOrder = (id) => {
     }).then(checkResponse);
 };
 
-export const apiPostOrder = (orderData) => {
+export const apiPostOrder = (orderData: string[]) => {
     return fetch(`${apiConfig.baseURL}orders`, {
         method: 'POST',
         headers: {
