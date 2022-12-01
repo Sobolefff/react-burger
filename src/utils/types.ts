@@ -57,7 +57,7 @@ export type TOrder = {
 
 export type TOrders = TOrder[];
 
-export type TStatsListProps = {
+export type TStatisticProps = {
     orders: Array<TOrder>;
 };
 
