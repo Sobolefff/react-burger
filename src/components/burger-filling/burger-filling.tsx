@@ -7,39 +7,48 @@ import {
 import { UPDATE_ITEMS } from '../../services/actions';
 import styles from '../burger-constructor/burger-constructor.module.css';
 import { useDrag, useDrop } from 'react-dnd';
-import { TBurgerElementProps } from "../../utils/types";
+import { TBurgerElementProps } from '../../utils/types';
 
-export const BurgerFilling: FC<TBurgerElementProps> = (props: TBurgerElementProps) => {
+export const BurgerFilling: FC<TBurgerElementProps> = (
+    props
+) => {
     const dispatch = useDispatch();
-    const ref = useRef<HTMLLIElement>(null);
-    const [{ isDrag }, drag] = useDrag({
+    const ref = useRef<HTMLLIElement | null>(null);
+    const [{ opacity }, drag] = useDrag({
         type: 'item',
-        item: props.index,
+        item: props,
         collect: (monitor) => ({
-            isDrag: monitor.isDragging(),
+            opacity: monitor.isDragging() ? 0.5 : 1
         }),
     });
-    const [, drop] = useDrop({
+    const [{ isSwap }, drop] = useDrop({
         accept: 'item',
+        collect: (monitor) => ({
+            isSwap: monitor.isOver(),
+        }),
         hover(item, monitor) {
             if (!ref.current) {
                 return;
-            }
-            const dragIndex = props.item.index;
-            const hoverIndex = props.index;
-            if (dragIndex === hoverIndex) {
+              }
+        
+              const dragIndex = props.item.index;
+              const hoverIndex = props.index;
+        
+              if (dragIndex === hoverIndex) {
                 return;
-            }
-            const elementPos = ref?.current?.getBoundingClientRect();
-            const elementMiddle = (elementPos.bottom - elementPos.top) / 2;
-            const userCursorOffset =
-                monitor!.getClientOffset()!.y - elementPos.top;
-            if (dragIndex! < hoverIndex && userCursorOffset < elementMiddle) {
+              }
+        
+              const elementPos = ref.current.getBoundingClientRect();
+              const elementMiddle = (elementPos.bottom - elementPos.top) / 2;
+              const userCursorOffset = monitor!.getClientOffset()!.y - elementPos.top;
+        
+              if (dragIndex! < hoverIndex && userCursorOffset < elementMiddle) {
                 return;
-            }
-            if (dragIndex! > hoverIndex && userCursorOffset > elementMiddle) {
+              }
+              if (dragIndex! > hoverIndex && userCursorOffset > elementMiddle) {
                 return;
-            }
+              }
+        
             dispatch({
                 type: UPDATE_ITEMS,
                 fromIndex: dragIndex,
@@ -48,7 +57,7 @@ export const BurgerFilling: FC<TBurgerElementProps> = (props: TBurgerElementProp
             props.item.index = hoverIndex;
         },
     });
-    const opacity = isDrag ? 0.5 : 1;
+    
     drag(drop(ref));
 
     return (
@@ -68,4 +77,4 @@ export const BurgerFilling: FC<TBurgerElementProps> = (props: TBurgerElementProp
             />
         </li>
     );
-}
+};

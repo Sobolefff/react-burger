@@ -117,8 +117,8 @@ const closeIngredient = (): ICloseCurrentIngredient => ({
 
 const updateIngredients = (toIndex: any, fromIndex: any): IUpdateItems => ({
     type: UPDATE_ITEMS,
-    toIndex,
     fromIndex,
+    toIndex,
 });
 
 export const getIngredients = () => (dispatch: AppDispatch) => {

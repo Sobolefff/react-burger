@@ -45,7 +45,7 @@ export const BurgerIngredient: FC<TIngredientData> = (
     );
 
     const openModal = () => {
-        dispatch(openCurrentIngredient(props), [dispatch]);
+        dispatch(openCurrentIngredient(props));
     };
 
     const closeAllModals = () => {

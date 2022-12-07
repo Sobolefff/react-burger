@@ -8,6 +8,7 @@ import {
 } from '../services/actions/ws';
 import { Statistic } from '../components/statistic/statistic';
 import { filterOrders } from '../utils/functions';
+import { WS_BASE_URL } from '../utils/constants';
 
 export const FeedPage: FC = () => {
     const dispatch = useDispatch();
@@ -18,11 +19,7 @@ export const FeedPage: FC = () => {
     const pendingArray = statusArrays?.pending.slice(0, 20);
 
     useEffect(() => {
-        dispatch(
-            wsConnectionStartAction(
-                'wss://norma.nomoreparties.space/orders/all'
-            )
-        );
+        dispatch(wsConnectionStartAction(`${WS_BASE_URL}/all`));
         return () => {
             dispatch(wsConnectionClosedAction());
         };

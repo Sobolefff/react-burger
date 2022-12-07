@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import styles from "./details-modal.module.css";
 import { TDetailsPageProps } from "../../utils/types";
 

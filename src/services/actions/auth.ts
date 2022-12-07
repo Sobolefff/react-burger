@@ -237,6 +237,9 @@ export const loginUser: AppThunk =
             } else {
                 dispatch(loginFailed());
             }
+        })
+        .catch((err) => {
+            console.log(err);
         });
     };
 
@@ -255,6 +258,9 @@ export const registerUser: AppThunk =
             } else {
                 dispatch(registerFailed());
             }
+        })
+        .catch((err) => {
+            console.log(err);
         });
     };
 
@@ -289,6 +295,9 @@ export const refreshTokenAction: AppThunk = () => (dispatch) => {
         .then((res) => checkResponse(res))
         .finally(() => {
             dispatch(checkAuth());
+        })
+        .catch((err) => {
+            console.log(err);
         });
 };
 
@@ -301,6 +310,9 @@ export const getUserInfo: AppThunk = () => (dispatch) => {
             } else {
                 dispatch(getUserInfoFailed());
             }
+        })
+        .catch((err) => {
+            console.log(err);
         })
         .finally(() => {
             dispatch(checkAuth());

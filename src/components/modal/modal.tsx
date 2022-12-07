@@ -7,7 +7,7 @@ import { TModalProps } from "../../utils/types";
 
 const modalsContainer = document.querySelector("#modals");
 
-export const Modal: FC<TModalProps> = (props: TModalProps) => {
+export const Modal: FC<TModalProps> = (props) => {
 
     const handleEscKeydown = (evt: KeyboardEvent) => {
         evt.key === "Escape" && props.onClose!();

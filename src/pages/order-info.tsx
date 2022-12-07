@@ -11,6 +11,7 @@ import {
 } from '../services/actions/ws';
 import { getCookie } from '../services/actions/auth';
 import { TIngredientDataArray, TIngredientData, TOrder } from '../utils/types';
+import { WS_BASE_URL } from '../utils/constants';
 
 export const OrderInfo: FC<TIngredientDataArray> = (
     data: TIngredientDataArray
@@ -24,9 +25,6 @@ export const OrderInfo: FC<TIngredientDataArray> = (
     const done = currentOrder?.status === 'done';
     const dateString = editDate(currentOrder?.createdAt!);
     const token = getCookie('tokenn');
-    const wsUrl = 'wss://norma.nomoreparties.space/orders/all';
-    const wsAuthUrl =
-        `wss://norma.nomoreparties.space/orders` + `?token=${token}`;
 
     let ingrData;
     let ingredients;
@@ -45,8 +43,8 @@ export const OrderInfo: FC<TIngredientDataArray> = (
 
     useEffect(() => {
         url === `/profile/orders/${id}`
-            ? dispatch(wsConnectionStartAction(wsAuthUrl))
-            : dispatch(wsConnectionStartAction(wsUrl));
+            ? dispatch(wsConnectionStartAction(`${WS_BASE_URL}?token=${token}`))
+            : dispatch(wsConnectionStartAction(`${WS_BASE_URL}/all`));
         return () => {
             dispatch(wsConnectionClosedAction());
         };

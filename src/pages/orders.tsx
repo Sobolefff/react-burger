@@ -8,16 +8,16 @@ import {
 import { useDispatch, useSelector } from '../services/store';
 import { useEffect, FC } from 'react';
 import { getCookie } from '../services/actions/auth';
+import { WS_BASE_URL } from '../utils/constants';
 
 export const Orders: FC = () => {
     const dispatch = useDispatch();
     const token = getCookie('tokenn');
-    const wsUrl = `wss://norma.nomoreparties.space/orders?token=${token}`;
     let { orders } = useSelector((state) => state.ws);
     const reversedorders = [...orders!.orders].reverse();
 
     useEffect(() => {
-        dispatch(wsConnectionStartAction(wsUrl));
+        dispatch(wsConnectionStartAction(`${WS_BASE_URL}?token=${token}`));
         return () => {
             dispatch(wsConnectionClosedAction());
         };

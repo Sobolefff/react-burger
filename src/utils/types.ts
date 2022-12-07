@@ -15,6 +15,7 @@ export type TBurgerElementProps = {
 
 export type TDetailsPageProps = {
     title: string;
+    onClose?: () => void;
     children: React.ReactNode;
 };
 
@@ -62,6 +63,11 @@ export type TStatisticProps = {
 };
 
 export type TProtectedRouteProps = {
+    children: React.ReactNode;
+    exact?: boolean;
+} & RouteComponentProps;
+
+export type TAuthorizedRouteProps = {
     children: React.ReactNode;
     exact?: boolean;
 } & RouteComponentProps;
