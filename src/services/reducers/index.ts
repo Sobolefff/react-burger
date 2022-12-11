@@ -150,10 +150,15 @@ export const constructorReducer = (
         }
         case UPDATE_ITEMS: {
             const fillings = [...state.burgerIngredients.fillings];
+
+            const oldIndex = state.burgerIngredients.fillings.findIndex((item) => item.key === action.fromIndex);
+            const newIndex = state.burgerIngredients.fillings.findIndex((item) => item.key === action.toIndex);
+
+
             fillings.splice(
-                action.toIndex,
+                newIndex,
                 0,
-                fillings.splice(action.fromIndex, 1)[0]
+                fillings.splice(oldIndex, 1)[0]
             );
             return {
                 ...state,

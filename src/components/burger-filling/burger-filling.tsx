@@ -7,64 +7,64 @@ import {
 import { UPDATE_ITEMS } from '../../services/actions';
 import styles from '../burger-constructor/burger-constructor.module.css';
 import { useDrag, useDrop } from 'react-dnd';
-import { TBurgerElementProps } from '../../utils/types';
+import { TBurgerElementProps, TIngredientData } from '../../utils/types';
 
-export const BurgerFilling: FC<TBurgerElementProps> = (
-    props
-) => {
+export const BurgerFilling: FC<TBurgerElementProps> = (props) => {
     const dispatch = useDispatch();
     const ref = useRef<HTMLLIElement | null>(null);
-    const [{ opacity }, drag] = useDrag({
+    const [{ isDrag }, drag] = useDrag({
         type: 'item',
         item: props,
         collect: (monitor) => ({
-            opacity: monitor.isDragging() ? 0.5 : 1
+            isDrag: monitor.isDragging(),
         }),
     });
-    const [{ isSwap }, drop] = useDrop({
+    const [, drop] = useDrop({
         accept: 'item',
-        collect: (monitor) => ({
-            isSwap: monitor.isOver(),
-        }),
-        hover(item, monitor) {
+
+        hover({ item }: { item: TIngredientData }, monitor) {
             if (!ref.current) {
                 return;
-              }
-        
-              const dragIndex = props.item.index;
-              const hoverIndex = props.index;
-        
-              if (dragIndex === hoverIndex) {
+            }
+            const hoverKey = props.item.key;
+            const dragKey = item.key;
+            const dragIndex = props.item.index;
+            const hoverIndex = props.index;
+
+            if (dragIndex === hoverIndex) {
                 return;
-              }
-        
-              const elementPos = ref.current.getBoundingClientRect();
-              const elementMiddle = (elementPos.bottom - elementPos.top) / 2;
-              const userCursorOffset = monitor!.getClientOffset()!.y - elementPos.top;
-        
-              if (dragIndex! < hoverIndex && userCursorOffset < elementMiddle) {
+            }
+
+            const elementPos = ref.current.getBoundingClientRect();
+            const elementMiddle = (elementPos.bottom - elementPos.top) / 2;
+            const userCursorOffset =
+                monitor!.getClientOffset()!.y - elementPos.top;
+
+            if (dragIndex! < hoverIndex! && userCursorOffset < elementMiddle) {
                 return;
-              }
-              if (dragIndex! > hoverIndex && userCursorOffset > elementMiddle) {
+            }
+            if (dragIndex! > hoverIndex! && userCursorOffset > elementMiddle) {
                 return;
-              }
-        
+            }
+
             dispatch({
                 type: UPDATE_ITEMS,
-                fromIndex: dragIndex,
-                toIndex: hoverIndex,
+                fromIndex: hoverKey,
+                toIndex: dragKey,
             });
             props.item.index = hoverIndex;
         },
     });
-    
+    const opacity = isDrag ? 0.5 : 1;
     drag(drop(ref));
 
     return (
+        <>
         <li
             className={`${styles.item} pb-4 pr-2`}
             ref={ref}
             style={{ opacity }}
+            
         >
             <div className="mr-2">
                 <DragIcon type="primary" />
@@ -76,5 +76,6 @@ export const BurgerFilling: FC<TBurgerElementProps> = (
                 handleClose={() => props.handleClose(props.item)}
             />
         </li>
+        </>
     );
 };
